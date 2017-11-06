@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import math
 
 ball_diameter = 4.0

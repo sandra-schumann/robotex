@@ -56,9 +56,9 @@ def detect_goal():
     #~ cv2.imshow('Camera image',frame)
 
 def talk_goal_pos():
-    pub = rospy.Publisher("goal_pos", Int32MultiArray, queue_size=10)
-    raw = rospy.Subscriber("VideoRaw", Image, callback)
     rospy.init_node('goal_detector', anonymous=True)
+    pub = rospy.Publisher("goal_pos", Int32MultiArray, queue_size=10)
+    rospy.Subscriber("VideoRaw", Image, callback)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         goalpos = detect_goal()

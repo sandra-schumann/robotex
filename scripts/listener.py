@@ -14,7 +14,7 @@ def listener():
     # run simultaneously.
     rospy.init_node('listener', anonymous=True)
 
-    rospy.Subscriber("ball_pos", Int32MultiArray, callback)
+    rospy.Subscriber("FromRef", String, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

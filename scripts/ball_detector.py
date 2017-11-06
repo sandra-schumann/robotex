@@ -66,9 +66,9 @@ def detect_ball():
     #~ cv2.imshow('Camera image',frame)
 
 def talk_ball_pos():
-    pub = rospy.Publisher("ball_pos", Int32MultiArray, queue_size=10)
-    raw = rospy.Subscriber("VideoRaw", Image, callback)
     rospy.init_node('ball_detector', anonymous=True)
+    pub = rospy.Publisher("ball_pos", Int32MultiArray, queue_size=10)
+    rospy.Subscriber("VideoRaw", Image, callback)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         ballpos = detect_ball()
