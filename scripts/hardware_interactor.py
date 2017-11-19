@@ -30,7 +30,7 @@ def turn_on_motors(data):
 def turn_on_thrower(speed):
     global current_command
     if current_command == "STOP":
-        ser.write('d:0\n')
+        ser.write('d:50\n')
         print "stopping thrower"
         return
     ser.write('d:%i\n' % (speed.data))
