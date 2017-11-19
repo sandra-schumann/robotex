@@ -59,8 +59,11 @@ def __main__():
     while not rospy.is_shutdown():
         c = read_ref_commands()
         if c:
-            if c == "STOP" or c == "START":
+            if c == "START":
                 current_command = c
+            if c == "STOP":
+                current_command = c
+                turn_on_motors(Int32MultiArray(data=[0,0,0]))
             pub.publish(c)
         
         rate.sleep()
