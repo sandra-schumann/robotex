@@ -42,9 +42,12 @@ def __main__():
     rospy.Subscriber("GoalPos", Int32MultiArray, callback_goal)
     
     rate = rospy.Rate(10) # 10hz
-    while 1:
+    while not rospy.is_shutdown():
         print "got a goal at", goal_dist, goal_angle
         rate.sleep()
 
 if __name__ == '__main__':
-    __main__()
+    try:
+        __main__()
+    except rospy.ROSInterruptException:
+        pass
