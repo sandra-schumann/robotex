@@ -50,7 +50,8 @@ def __main__():
     rate = rospy.Rate(1000)
     while not rospy.is_shutdown():
         c = read_ref_commands()
-        pub.publish(c)
+        if c:
+            pub.publish(c)
         
         rate.sleep()
 
