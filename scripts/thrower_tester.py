@@ -9,7 +9,7 @@ def talker():
     rospy.init_node('thrower_tester', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
-        s = Int32(raw_input("Enter desired speed: "))
+        s = int(raw_input("Enter desired speed: "))
         rospy.loginfo(s)
         pub.publish(s)
         rate.sleep()
