@@ -6,7 +6,7 @@ from std_msgs.msg import Int32MultiArray, String
 from constants import robot_ID, field_ID
 
 ser = None
-current_command = "START"
+current_command = "STOP"
 
 def init_mainboard():
     global ser
