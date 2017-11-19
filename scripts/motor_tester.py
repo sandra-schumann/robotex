@@ -11,6 +11,7 @@ def talker():
     direction = 1
     while not rospy.is_shutdown():
         dirs = Int32MultiArray(data=[10*direction, 10*direction, 10*direction])
+        direction = direction*(-1)
         rospy.loginfo(dirs)
         pub.publish(dirs)
         rate.sleep()
