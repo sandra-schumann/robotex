@@ -48,6 +48,7 @@ def __main__():
     pub2 = rospy.Publisher("FromMotors", Int32MultiArray, queue_size=10)
     init_mainboard()
     rate = rospy.Rate(1000)
+    print "Rate is:", rate
     while not rospy.is_shutdown():
         c = read_ref_commands()
         if c:
