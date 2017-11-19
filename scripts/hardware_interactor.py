@@ -2,7 +2,7 @@
 
 import rospy
 import serial
-from std_msgs.msg import Int32MultiArray, String
+from std_msgs.msg import Int32MultiArray, String, Int32
 from constants import robot_ID, field_ID
 
 ser = None
@@ -27,9 +27,17 @@ def turn_on_motors(data):
     #~ if find_gs != -1:
         #~ s = s[find_gs+3:find_gs+15]
 
+def turn_on_thrower(speed):
+    global current_command
+    if current_command == "STOP":
+        ser.write('d:0\n')
+        print "stopping thrower"
+        return
+    ser.write('d:%i\n' % (speed))
+    print "turning on thrower at", speed
+
 def read_ref_commands():
     s = ser.read(100)
-    #~ s = "ref:aBCSTOP----\n"
     find_ref = s.find("ref:")
     if find_ref != -1:
         s = s[find_ref+4:find_ref+16]
@@ -52,6 +60,7 @@ def __main__():
     global current_command
     rospy.init_node('hardware_interactor', anonymous=True)
     rospy.Subscriber("ToMotors", Int32MultiArray, turn_on_motors)
+    rospy.Subscriber("ToThrower", Int32, turn_on_thrower)
     pub = rospy.Publisher("FromRef", String, queue_size=10)
     pub2 = rospy.Publisher("FromMotors", Int32MultiArray, queue_size=10)
     init_mainboard()
@@ -64,6 +73,7 @@ def __main__():
             if c == "STOP":
                 current_command = c
                 turn_on_motors(Int32MultiArray(data=[0,0,0]))
+                turn_on_thrower(0)
             pub.publish(c)
         
         rate.sleep()
