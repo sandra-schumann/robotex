@@ -10,7 +10,7 @@ def talker():
     rate = rospy.Rate(0.5) # 10hz
     direction = 1
     while not rospy.is_shutdown():
-        dirs = Int32MultiArray([10*direction, 10*direction, 10*direction])
+        dirs = Int32MultiArray(data=[10*direction, 10*direction, 10*direction])
         rospy.loginfo(dirs)
         pub.publish(dirs)
         rate.sleep()
