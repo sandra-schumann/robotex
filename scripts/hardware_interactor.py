@@ -33,8 +33,8 @@ def turn_on_thrower(speed):
         ser.write('d:0\n')
         print "stopping thrower"
         return
-    ser.write('d:%i\n' % (speed))
-    print "turning on thrower at", speed
+    ser.write('d:%i\n' % (speed.data))
+    print "turning on thrower at", speed.data
 
 def read_ref_commands():
     s = ser.read(100)
