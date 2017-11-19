@@ -31,7 +31,7 @@ def callback_goal(data):
     global goal_dist, goal_angle
     goal_rect = data.data
     goal_dist = hinda_kaugust(goal_rect[1]/480.)
-    goal_angle = hinda_nurka(goal_rect[0]+goal_rect[2]/2-320)
+    goal_angle = hinda_nurka(goal_rect[0]+goal_rect[2]/2-320)*180/math.pi
 
 def callback_ball(data):
     balls = [ (data.data[3*i], data.data[3*i+1], data.data[3*i+2]) for i in range(len(data.data)/3) ]
