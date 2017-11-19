@@ -19,7 +19,7 @@ def turn_on_motors(data):
         ser.write('sd:0:0:0\n')
         print "stopping motors"
         return
-    (f1, f2, f3) = tuple(data[0:3])
+    (f1, f2, f3) = tuple(data.data[0:3])
     ser.write('sd:%i:%i:%i\n' % (round(f1*128), round(f3*128), round(f2*128)))
     print "turning motors at", f1, f2, f3
     #~ s = ser.read(100)
