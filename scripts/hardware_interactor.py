@@ -45,7 +45,7 @@ def __main__():
     rospy.init_node('hardware_interactor', anonymous=True)
     rospy.Subscriber("ToMotors", Int32MultiArray, turn_on_motors)
     pub = rospy.Publisher("FromRef", String, queue_size=10)
-    pub2 = rospy.Published("FromMotors", Int32MultiArray, queue_size=10)
+    pub2 = rospy.Publisher("FromMotors", Int32MultiArray, queue_size=10)
     init_mainboard()
     rate = rospy.Rate(1000)
     while not rospy.is_shutdown():
