@@ -131,7 +131,7 @@ def __main__():
         
         if sum(goalpos) != -4:
             goal_positions = Int32MultiArray(data=goalpos)
-            #~ rospy.loginfo(goal_positions)
+            rospy.loginfo(goal_positions)
             goalpub.publish(goal_positions)
         
         rate.sleep()
