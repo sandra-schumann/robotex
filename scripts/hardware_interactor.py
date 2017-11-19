@@ -6,6 +6,7 @@ from std_msgs.msg import Int32MultiArray, String
 from constants import robot_ID, field_ID
 
 ser = None
+current_command = "START"
 
 def init_mainboard():
     global ser
@@ -13,6 +14,10 @@ def init_mainboard():
     ser.write('sd:0:0:0\n')
 
 def turn_on_motors(data):
+    global current_command
+    if current_command == "STOP":
+        ser.write('sd:0:0:0\n')
+        return
     (f1, f2, f3) = tuple(data[0:3])
     ser.write('sd:%i:%i:%i\n' % (round(f1*128), round(f3*128), round(f2*128)))
     #~ s = ser.read(100)
@@ -42,6 +47,7 @@ def read_ref_commands():
     return c
 
 def __main__():
+    global current_command
     rospy.init_node('hardware_interactor', anonymous=True)
     rospy.Subscriber("ToMotors", Int32MultiArray, turn_on_motors)
     pub = rospy.Publisher("FromRef", String, queue_size=10)
@@ -51,6 +57,8 @@ def __main__():
     while not rospy.is_shutdown():
         c = read_ref_commands()
         if c:
+            if c == "STOP" or c == "START":
+                current_command = c
             pub.publish(c)
         
         rate.sleep()
