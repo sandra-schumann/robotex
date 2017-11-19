@@ -10,11 +10,11 @@ ser = None
 def init_mainboard():
     global ser
     ser = serial.Serial("/dev/ttyACM0",9600,timeout = 0.002)
-    ser.write('sd0:0:0:0\n')
+    ser.write('sd:0:0:0\n')
 
 def turn_on_motors(data):
-    (f1, f2, f3, f4) = tuple(data[0:4])
-    ser.write('sd%i:%i:%i:%i\n' % (round(f4*128), round(f2*128), round(f1*128), round(f3*128)))
+    (f1, f2, f3) = tuple(data[0:3])
+    ser.write('sd:%i:%i:%i\n' % (round(f1*128), round(f3*128), round(f2*128)))
     #~ s = ser.read(100)
     #~ find_gs = s.find("gs:")
     #~ if find_gs != -1:
