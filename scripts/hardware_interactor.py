@@ -28,7 +28,7 @@ def read_ref_commands():
         s = s[find_ref+4:find_ref+16]
     else:
         s = ""
-    c = 0
+    c = ""
     if len(s) > 0 and s[0] == 'a' and len(s) >= 12:
         if s[1] == field_ID and (s[2] == robot_ID or s[2] == 'X'):
             # Command start
