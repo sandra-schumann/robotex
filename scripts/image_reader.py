@@ -100,8 +100,8 @@ def detect_goal(frame):
         x, y, w, h = goal_rect[0], goal_rect[1], goal_rect[2], goal_rect[3]
         cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
     
-    #~ cv2.imshow("",frame)
-    #~ k = cv2.waitKey(5) & 0xFF
+    cv2.imshow("",frame)
+    k = cv2.waitKey(5) & 0xFF
     
     return goal_rect
 
@@ -134,7 +134,7 @@ def __main__():
             rospy.loginfo(goal_positions)
             goalpub.publish(goal_positions)
         
-        rate.sleep()
+        #~ rate.sleep()
 
 if __name__ == '__main__':
     try:
