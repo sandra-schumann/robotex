@@ -3,7 +3,7 @@ import rospy
 from std_msgs.msg import String, Int32MultiArray
 
 def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "I heard " + str(data.data))
+    rospy.loginfo(rospy.get_caller_id() + "\nI heard " + str(data.data))
     
 def listener():
 
@@ -14,7 +14,7 @@ def listener():
     # run simultaneously.
     rospy.init_node('listener', anonymous=True)
 
-    rospy.Subscriber("FromRef", String, callback)
+    rospy.Subscriber("goal_pos", Int32MultiArray, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

@@ -15,6 +15,10 @@ def init_mainboard():
 def turn_on_motors(data):
     (f1, f2, f3, f4) = tuple(data[0:4])
     ser.write('sd%i:%i:%i:%i\n' % (round(f4*128), round(f2*128), round(f1*128), round(f3*128)))
+    s = ser.read(100)
+    find_gs = s.find("gs:")
+    if find_gs != -1:
+        s = s[find_gs+3:find_gs+15
 
 def read_ref_commands():
     s = ser.read(100)
@@ -41,11 +45,13 @@ def __main__():
     rospy.init_node('hardware_interactor', anonymous=True)
     rospy.Subscriber("ToMotors", Int32MultiArray, turn_on_motors)
     pub = rospy.Publisher("FromRef", String, queue_size=10)
+    pub2 = rospy.Published("FromMotors", Int32MultiArray, queue_size=10)
     init_mainboard()
-    rate = rospy.Rate(1000) # 10hz
+    rate = rospy.Rate(1000)
     while not rospy.is_shutdown():
         c = read_ref_commands()
         pub.publish(c)
+        
         rate.sleep()
 
 if __name__ == '__main__':

@@ -16,12 +16,15 @@ upper_goal = np.array([int(t[1][0]),int(t[1][1]),int(t[1][2])])
 
 frame = None
 
+goalpos = None
+
 def callback(data):
     global frame
     frame = CvBridge().imgmsg_to_cv2(data)
+    detect_goal()
 
 def detect_goal():
-    global frame
+    global frame, goalpos
     # Take each frame
     #~ _, frame = cap.read()
     # Convert BGR to HSV
@@ -51,20 +54,23 @@ def detect_goal():
     else:
         goal_rect = [-1,-1,-1,-1]
     
-    return goal_rect
+    goalpos = goal_rect
     
     #~ cv2.imshow('Camera image',frame)
 
 def talk_goal_pos():
+    global goalpos
     rospy.init_node('goal_detector', anonymous=True)
     pub = rospy.Publisher("goal_pos", Int32MultiArray, queue_size=10)
     rospy.Subscriber("VideoRaw", Image, callback)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
-        goalpos = detect_goal()
-        goal_positions = Int32MultiArray(data=goalpos)
-        rospy.loginfo(goal_positions)
-        pub.publish(goal_positions)
+        if goalpos == None:
+            pass
+        else:
+            goal_positions = Int32MultiArray(data=goalpos)
+            rospy.loginfo(goal_positions)
+            pub.publish(goal_positions)
         rate.sleep()
 
 def __main__():

@@ -18,7 +18,8 @@ while not rospy.is_shutdown():
     _, frame = cap.read()
     
     msg_frame = CvBridge().cv2_to_imgmsg(frame)
-
+    
+    #~ rospy.loginfo(msg_frame)
     rawimage.publish(msg_frame)
 
-    time.sleep(0.1)
+    time.sleep(0.01)
