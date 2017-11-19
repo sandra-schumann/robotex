@@ -9,7 +9,7 @@ ser = None
 
 def init_mainboard():
     global ser
-    ser = serial.Serial("/dev/ttyACM3",9600,timeout = 0.002)
+    ser = serial.Serial("/dev/ttyACM0",9600,timeout = 0.002)
     ser.write('sd0:0:0:0\n')
 
 def turn_on_motors(data):
