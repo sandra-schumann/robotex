@@ -43,7 +43,7 @@ def __main__():
     
     rate = rospy.Rate(10) # 10hz
     while 1:
-        print "got a goal at", goaldist, goalangle
+        print "got a goal at", goal_dist, goal_angle
         rate.sleep()
 
 if __name__ == '__main__':
