@@ -25,12 +25,12 @@ def turn_on_motors(data):
         (f1, f2, f3) = tuple(data.data[0:3])
         ser.write('sd:%i:%i:%i\n' % (round(f1), round(f3), round(f2)))
         print "turning motors at", f1, f2, f3
-    while True:
-        news = ser.read(100)
-        if news == "":
-            break
-        sdata += news
-        time.sleep(0.05)
+    #~ while True:
+        #~ news = ser.read(100)
+        #~ if news == "":
+            #~ break
+        #~ sdata += news
+    sdata += ser.read(100)
     find_gs = sdata.find("gs:")
     if find_gs != -1:
         s = sdata[find_gs+3:find_gs+15]
