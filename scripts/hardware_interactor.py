@@ -25,11 +25,11 @@ def turn_on_motors(data):
         (f1, f2, f3) = tuple(data.data[0:3])
         ser.write('sd:%i:%i:%i\n' % (round(f1), round(f3), round(f2)))
         print "turning motors at", f1, f2, f3
-    #~ while True:
-        #~ news = ser.read(100)
-        #~ if news == "":
-            #~ break
-        #~ sdata += news
+    while True:
+        news = ser.read(100)
+        if news == "":
+            break
+        sdata += news
     #~ sdata += ser.read(100)
     find_gs = sdata.find("gs:")
     if find_gs != -1:
@@ -37,15 +37,15 @@ def turn_on_motors(data):
         newstime = time.time()
         sdata = sdata[find_gs+15:]
         print "got gs", s
-        if stime != None:
-            gs = s.split(':')
-            for i in range(len(gs)):
-                try:
-                    gs[i] = int(gs[i])
-                except:
-                    gs = gs[:i]
-            print "gs is", gs
-            print "time that passed was", newstime - stime
+        #~ if stime != None:
+            #~ gs = s.split(':')
+            #~ for i in range(len(gs)):
+                #~ try:
+                    #~ gs[i] = int(gs[i])
+                #~ except:
+                    #~ gs = gs[:i]
+            #~ print "gs is", gs
+            #~ print "time that passed was", newstime - stime
             #~ print "distances gone through:", (newstime-stime)*
 
 def turn_on_thrower(speed):
