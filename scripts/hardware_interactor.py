@@ -30,6 +30,7 @@ def turn_on_motors(data):
         if news == "":
             break
         sdata += news
+        time.sleep(0.05)
     find_gs = sdata.find("gs:")
     if find_gs != -1:
         s = sdata[find_gs+3:find_gs+15]
