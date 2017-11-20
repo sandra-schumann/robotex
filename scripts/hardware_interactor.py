@@ -11,6 +11,7 @@ current_command = "STOP"
 sdata = ""
 stime = None
 prevstime = None
+total_dists = [0,0,0]
 
 def init_mainboard():
     global ser
@@ -89,7 +90,7 @@ def read_ref_commands():
     return c
 
 def __main__():
-    global current_command, sdata
+    global current_command, sdata, total_dists
     rospy.init_node('hardware_interactor', anonymous=True)
     rospy.Subscriber("ToMotors", Int32MultiArray, turn_on_motors)
     rospy.Subscriber("ToThrower", Int32, turn_on_thrower)
@@ -122,7 +123,9 @@ def __main__():
                         gs = gs[:i]
                 print "gs is", gs
                 print "time that passed was", stime - prevstime
-                #~ print "distances gone through:", (newstime-stime)*
+                for i in range(len(gs)):
+                    total_dists[i] += (stime - prevstime)*gs[i]
+                print "total distance:" total_dists
         
         rate.sleep()
 
