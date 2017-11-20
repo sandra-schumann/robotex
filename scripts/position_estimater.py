@@ -14,7 +14,7 @@ def hinda_kaugust(b_frac):
     d = (h**2 + a**2 + b**2 - 2*(h**2 + a**2)**0.5*b*math.cos(math.pi/2-phi/2))**0.5
     beta = math.asin(b*math.sin(math.pi/2-phi/2)/d)
     x = h*math.tan(alpha+beta)
-    x_corr = 1.23392*x-23.698 #-1.061051392*(13.284393419-x) #-1.26582*(11.85-x)
+    x_corr = x #-1.061051392*(13.284393419-x) #-1.26582*(11.85-x)
     return x_corr
 
 def hinda_nurka(x):
