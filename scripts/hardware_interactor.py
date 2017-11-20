@@ -23,7 +23,11 @@ def turn_on_motors(data):
         (f1, f2, f3) = tuple(data.data[0:3])
         ser.write('sd:%i:%i:%i\n' % (round(f1), round(f3), round(f2)))
         print "turning motors at", f1, f2, f3
-    sdata += ser.read(100)
+    while True:
+        news = ser.read(100)
+        if news == "":
+            break
+        sdata += news
     find_gs = sdata.find("gs:")
     if find_gs != -1:
         s = sdata[find_gs+3:find_gs+15]
@@ -41,7 +45,11 @@ def turn_on_thrower(speed):
 
 def read_ref_commands():
     global sdata
-    sdata += ser.read(100)
+    while True:
+        news = ser.read(100)
+        if news == "":
+            break
+        sdata += news
     find_ref = sdata.find("ref:")
     if find_ref != -1:
         print "sdata is", sdata
