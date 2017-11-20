@@ -45,7 +45,7 @@ def read_ref_commands():
     find_ref = sdata.find("ref:")
     if find_ref != -1:
         s = sdata[find_ref+4:find_ref+16]
-        sdata = sdata[find_gs+16:]
+        sdata = sdata[find_ref+16:]
     else:
         s = ""
     c = ""
