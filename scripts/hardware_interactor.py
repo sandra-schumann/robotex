@@ -10,6 +10,7 @@ ser = None
 current_command = "STOP"
 sdata = ""
 stime = None
+prevstime = None
 
 def init_mainboard():
     global ser
@@ -25,11 +26,11 @@ def turn_on_motors(data):
         (f1, f2, f3) = tuple(data.data[0:3])
         ser.write('sd:%i:%i:%i\n' % (round(f1), round(f3), round(f2)))
         print "turning motors at", f1, f2, f3
-    while True:
-        news = ser.read(100)
-        if news == "":
-            break
-        sdata += news
+    #~ while True:
+        #~ news = ser.read(100)
+        #~ if news == "":
+            #~ break
+        #~ sdata += news
     #~ sdata += ser.read(100)
     #~ find_gs = sdata.find("gs:")
     #~ if find_gs != -1:
@@ -58,9 +59,11 @@ def turn_on_thrower(speed):
     print "turning on thrower at", speed.data
 
 def read_ref_commands():
-    global sdata, ser
+    global sdata, ser, stime, prevstime
     while True:
         news = ser.read(100)
+        prevstime = stime
+        stime = time.time()
         if news == "":
             break
         sdata += news
@@ -86,7 +89,7 @@ def read_ref_commands():
     return c
 
 def __main__():
-    global current_command
+    global current_command, sdata
     rospy.init_node('hardware_interactor', anonymous=True)
     rospy.Subscriber("ToMotors", Int32MultiArray, turn_on_motors)
     rospy.Subscriber("ToThrower", Int32, turn_on_thrower)
@@ -104,6 +107,22 @@ def __main__():
                 turn_on_motors(Int32MultiArray(data=[0,0,0]))
                 turn_on_thrower(0)
             pub.publish(c)
+        
+        find_gs = sdata.find("gs:")
+        if find_gs != -1:
+            s = sdata[find_gs+3:find_gs+15]
+            sdata = sdata[find_gs+15:]
+            print "got gs", s
+            if prevstime != None:
+                gs = s.split(':')
+                for i in range(len(gs)):
+                    try:
+                        gs[i] = int(gs[i])
+                    except:
+                        gs = gs[:i]
+                print "gs is", gs
+                print "time that passed was", stime - prevstime
+                #~ print "distances gone through:", (newstime-stime)*
         
         rate.sleep()
 
