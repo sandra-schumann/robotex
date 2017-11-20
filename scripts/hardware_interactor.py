@@ -4,10 +4,12 @@ import rospy
 import serial
 from std_msgs.msg import Int32MultiArray, String, Int32
 from constants import robot_ID, field_ID
+import time
 
 ser = None
 current_command = "STOP"
 sdata = ""
+stime = None
 
 def init_mainboard():
     global ser
@@ -15,7 +17,7 @@ def init_mainboard():
     ser.write('sd:0:0:0\n')
 
 def turn_on_motors(data):
-    global current_command, sdata
+    global current_command, sdata, stime
     if current_command == "STOP":
         ser.write('sd:0:0:0\n')
         print "stopping motors"
@@ -31,8 +33,19 @@ def turn_on_motors(data):
     find_gs = sdata.find("gs:")
     if find_gs != -1:
         s = sdata[find_gs+3:find_gs+15]
-        print "got gs", s
+        newstime = time.time()
         sdata = sdata[find_gs+15:]
+        print "got gs", s
+        if stime != None:
+            gs = s.split(':')
+            for i in range(len(gs)):
+                try:
+                    gs[i] = int(gs[i])
+                except:
+                    gs = gs[:i]
+            print "gs is", gs
+            print "time that passed was", newstime - stime
+            #~ print "distances gone through:", (newstime-stime)*
 
 def turn_on_thrower(speed):
     global current_command
