@@ -7,6 +7,7 @@ from constants import robot_ID, field_ID
 
 ser = None
 current_command = "STOP"
+sdata = ""
 
 def init_mainboard():
     global ser
@@ -14,18 +15,20 @@ def init_mainboard():
     ser.write('sd:0:0:0\n')
 
 def turn_on_motors(data):
-    global current_command
+    global current_command, sdata
     if current_command == "STOP":
         ser.write('sd:0:0:0\n')
         print "stopping motors"
-        return
-    (f1, f2, f3) = tuple(data.data[0:3])
-    ser.write('sd:%i:%i:%i\n' % (round(f1), round(f3), round(f2)))
-    print "turning motors at", f1, f2, f3
-    #~ s = ser.read(100)
-    #~ find_gs = s.find("gs:")
-    #~ if find_gs != -1:
-        #~ s = s[find_gs+3:find_gs+15]
+    else:
+        (f1, f2, f3) = tuple(data.data[0:3])
+        ser.write('sd:%i:%i:%i\n' % (round(f1), round(f3), round(f2)))
+        print "turning motors at", f1, f2, f3
+    sdata += ser.read(100)
+    find_gs = sdata.find("gs:")
+    if find_gs != -1:
+        s = sdata[find_gs+3:find_gs+15]
+        print "got gs", s
+        sdata = sdata[find_gs+15:]
 
 def turn_on_thrower(speed):
     global current_command
@@ -37,10 +40,12 @@ def turn_on_thrower(speed):
     print "turning on thrower at", speed.data
 
 def read_ref_commands():
-    s = ser.read(100)
-    find_ref = s.find("ref:")
+    global sdata
+    sdata += ser.read(100)
+    find_ref = sdata.find("ref:")
     if find_ref != -1:
-        s = s[find_ref+4:find_ref+16]
+        s = sdata[find_ref+4:find_ref+16]
+        sdata = sdata[find_gs+16:]
     else:
         s = ""
     c = ""
