@@ -44,8 +44,10 @@ def read_ref_commands():
     sdata += ser.read(100)
     find_ref = sdata.find("ref:")
     if find_ref != -1:
+        print "sdata is", sdata
         s = sdata[find_ref+4:find_ref+16]
         sdata = sdata[find_ref+16:]
+        print "got ref", s
     else:
         s = ""
     c = ""
