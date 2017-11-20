@@ -125,7 +125,7 @@ def __main__():
                 print "time that passed was", stime - prevstime
                 for i in range(len(gs)):
                     total_dists[i] += (stime - prevstime)*gs[i]
-                print "total distance:" total_dists
+                print "total distance:", total_dists
         
         rate.sleep()
 
