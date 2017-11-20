@@ -17,7 +17,7 @@ def init_mainboard():
     ser.write('sd:0:0:0\n')
 
 def turn_on_motors(data):
-    global current_command, sdata, stime
+    global current_command, sdata, stime, ser
     if current_command == "STOP":
         ser.write('sd:0:0:0\n')
         print "stopping motors"
@@ -58,7 +58,7 @@ def turn_on_thrower(speed):
     print "turning on thrower at", speed.data
 
 def read_ref_commands():
-    global sdata
+    global sdata, ser
     while True:
         news = ser.read(100)
         if news == "":
