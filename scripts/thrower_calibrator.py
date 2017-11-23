@@ -59,20 +59,20 @@ def __main__():
     rate = rospy.Rate(10) # 10hz
 
     while not rospy.is_shutdown():
-        if goal_angle*180/math.pi > 1:
-            print "angle too big"
-        elif goal_angle*180/math.pi < -1:
-            print "angle too small"
-        else:
-            s = int(raw_input("Enter desired speed: "))
-            pub.publish(s)
-            rate.sleep()
-            sisse = int(raw_input("Sisse? "))
-            pub.publish(50)
-            if sisse == 1:
-                dist_list.append((goal_dist, s))
-            elif sisse == -1:
-                break
+        #~ if goal_angle*180/math.pi > 1:
+            #~ print "angle too big"
+        #~ elif goal_angle*180/math.pi < -1:
+            #~ print "angle too small"
+        #~ else:
+        s = int(raw_input("Enter desired speed: "))
+        pub.publish(s)
+        rate.sleep()
+        sisse = int(raw_input("Sisse? "))
+        pub.publish(50)
+        if sisse == 1:
+            dist_list.append((goal_dist, s))
+        elif sisse == -1:
+            break
         
         rate.sleep()
     
