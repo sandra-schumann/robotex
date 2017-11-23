@@ -120,7 +120,7 @@ def __main__():
                     pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
                 
             elif state == 1:
-                if tball_dist < 5:
+                if tball_dist and tball_dist < 5:
                     print "we're close to the ball"
                     state = 2
                 else:
