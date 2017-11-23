@@ -68,7 +68,7 @@ def callback_goal(data):
     global goal_dist, goal_angle, goal_dist_2, goal_dist_3
     goal_rect = data.data
     goal_dist = hinda_kaugust(goal_rect[1]/480.)
-    goal_angle = hinda_nurka(goal_rect[0]+goal_rect[2]/2-320)*180/math.pi
+    goal_angle = hinda_nurka(goal_rect[0]+goal_rect[2]/2)*180/math.pi
     goal_dist_2 = dist_from_hdata(goal_rect[1])
     goal_dist_3 = dist_from_wdata(goal_rect[2])
 
