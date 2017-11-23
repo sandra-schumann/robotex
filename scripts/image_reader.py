@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from std_msgs.msg import Int32MultiArray
+from std_msgs.msg import Int32MultiArray, Float32MultiArray
 from sensor_msgs.msg import Image
 import numpy as np
 import cv2
@@ -113,6 +113,7 @@ def __main__():
     rospy.init_node('image_reader', anonymous=True)
     ballpub = rospy.Publisher("BallPos", Int32MultiArray, queue_size=10)
     goalpub = rospy.Publisher("GoalPos", Int32MultiArray, queue_size=10)
+    linepub = rospy.Publisher("LinePos", Float32MultiArray, queue_size=10)
     rate = rospy.Rate(10) # 10hz
     
     while not rospy.is_shutdown():
@@ -120,19 +121,35 @@ def __main__():
         # Convert BGR to HSV
         #~ frame = cv2.medianBlur(frame,1)
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)[:400,:640]
         
         balls = detect_ball(hsv)
         goalpos = detect_goal(frame)
         
         if balls != []:
             ball_positions = Int32MultiArray(data=balls)
-            #~ rospy.loginfo(ball_positions)
+            rospy.loginfo(ball_positions)
             ballpub.publish(ball_positions)
         
         if sum(goalpos) != -4:
             goal_positions = Int32MultiArray(data=goalpos)
             rospy.loginfo(goal_positions)
             goalpub.publish(goal_positions)
+        
+        edges = cv2.Canny(gray,400,500)
+        lines = cv2.HoughLines(edges,1,np.pi/180,200)
+        try:
+            linepub_data = []
+            for line in lines:
+                print line
+                linepub_data.append(line[0][0])
+                linepub_data.append(line[0][1])
+            if linepub_data:
+                linepub_data = Float32MultiArray(data=linepub_data)
+                rospy.loginfo(linepub_data)
+                linepub.publish(linepub_data)
+        except Exception, e:
+            print e
         
         rate.sleep()
 

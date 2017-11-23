@@ -66,16 +66,16 @@ def towards_point((x,y)):
         return Vector(0,0,False)
     
     dist_to_point = ((robot_pos[0]-x)**2+(robot_pos[1]-y)**2)**0.5
-    towards_vec = Vector(x - robot_pos[0],y - robot_pos[1],True)*(20.0/dist_to_point)
+    towards_vec = Vector(x - robot_pos[0],y - robot_pos[1],True)*(max(20.0/dist_to_point, 1))
     for ballx, bally in balls_pos:
         dist_to_ball = ((robot_pos[0]-ballx)**2+(robot_pos[1]-bally)**2)**0.5
         away_from_ball = Vector(robot_pos[0] - ballx,robot_pos[1] - bally,True)*(6131066257801.0/(dist_to_ball**10))
         towards_vec += away_from_ball
     dist_from_basket1 = ((robot_pos[0] - goal1_pos[0])**2 + (robot_pos[1] - goal1_pos[1])**2)**0.5
-    away_goal1 = Vector(robot_pos[0] - goal1_pos[0], robot_pos[0] - goal1_pos[1], True)*(481890304.0/(dist_from_basket1**6))
+    away_goal1 = Vector(robot_pos[0] - goal1_pos[0], robot_pos[0] - goal1_pos[1], True)*(3010936384.0/(dist_from_basket1**6))
     towards_vec += away_goal1
     dist_from_basket2 = ((robot_pos[0] - goal2_pos[0])**2 + (robot_pos[1] - goal2_pos[1])**2)**0.5
-    away_goal2 = Vector(robot_pos[0] - goal2_pos[0], robot_pos[0] - goal2_pos[1], True)*(481890304.0/(dist_from_basket2**6))
+    away_goal2 = Vector(robot_pos[0] - goal2_pos[0], robot_pos[0] - goal2_pos[1], True)*(3010936384.0/(dist_from_basket2**6))
     towards_vec += away_goal2
     return towards_vec
 

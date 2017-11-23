@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import String, Int32MultiArray
+from std_msgs.msg import String, Int32MultiArray, Float32MultiArray
 
 def callback(data):
     rospy.loginfo(rospy.get_caller_id() + "\nI heard " + str(data.data))
@@ -14,7 +14,7 @@ def listener():
     # run simultaneously.
     rospy.init_node('listener', anonymous=True)
 
-    rospy.Subscriber("BallPos", Int32MultiArray, callback)
+    rospy.Subscriber("LinePos", Float32MultiArray, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
