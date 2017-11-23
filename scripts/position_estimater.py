@@ -150,11 +150,25 @@ def __main__():
                 print "turning around the ball"
                 if time.time() - goal_age > 1:
                     print "otsime varavat"
-                    ms1, ms2, ms3 = get_motor_speeds(0,0.2,0)
-                else:
-                    print "leidsime varava"
-                    state = 3
-                pubmot.publish(data=[ms1+0.2*128,ms2+0.2*128,ms3+0.2*128])
+                    if tball_ang > 1*math.pi/180:
+                        omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
+                        vx = 0
+                        vy = 0
+                    elif tball_ang < -1*math.pi/180:
+                        omega = max(min(0.4, -tball_ang*180/math.pi/100),0.05)
+                        vx = 0
+                        vy = 0
+                    elif tball_dist > 15:
+                        vx = max(min(0.4,(tball_dist-20)/20),0.05)
+                        vy = 0
+                        omega = 0
+                    else:
+                        vx = 0
+                        omega = 0
+                        vy = 0.2
+                    ms1, ms2, ms3 = get_motor_speeds(vx, vy, omega)
+                    pubmot.publish(Int32MultiArray(data=[ms1, ms2, ms3]))
+                    
             else:
                 state = 3
                 pub.publish(50)
