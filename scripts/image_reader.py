@@ -108,6 +108,7 @@ def detect_goal(frame):
     return goal_rect
 
 def __main__():
+    print "started image reading"
     frame = None
     balls = []
     goalpos = [-1, -1, -1, -1]
