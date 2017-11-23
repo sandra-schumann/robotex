@@ -131,9 +131,12 @@ def __main__():
                 else:
                     print "ball distance:", tball_dist
                     for i in range(len(balls_angle)):
-                        if balls_dist[i] < 540:
-                            tball_dist = balls_dist[i]
-                            tball_ang = balls_angle[i]
+                        try:
+                            if balls_dist[i] < 540:
+                                tball_dist = balls_dist[i]
+                                tball_ang = balls_angle[i]
+                        except:
+                            pass
                     if tball_ang > 1*math.pi/180:
                         print "ball angle is", tball_ang, "greater than 1"
                         omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
