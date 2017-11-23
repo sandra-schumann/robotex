@@ -130,7 +130,7 @@ def __main__():
                     state = 2
                 else:
                     print "ball distance:", tball_dist
-                    if balls_dist[0] < 540:
+                    if len(balls_dist) > 0 and balls_dist[0] < 540:
                         tball_dist = balls_dist[0]
                         tball_ang = balls_angle[0]
                     if tball_ang > 1*math.pi/180:
@@ -152,7 +152,7 @@ def __main__():
                 print "turning around the ball"
                 if time.time() - goal_age > 1:
                     print "otsime varavat"
-                    if balls_dist[0] < 540:
+                    if len(balls_dist) > 0 and balls_dist[0] < 540:
                         tball_dist = balls_dist[0]
                         tball_ang = balls_angle[0]
                     if tball_ang > 1*math.pi/180:
@@ -180,7 +180,7 @@ def __main__():
                     state = 3
             elif state == 3:
                 print "varav keskele"
-                if balls_dist[0] < 540:
+                if len(balls_dist) > 0 and balls_dist[0] < 540:
                     tball_dist = balls_dist[0]
                     tball_ang = balls_angle[0]
                 vx = 0
