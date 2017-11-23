@@ -68,10 +68,13 @@ def __main__():
         pub.publish(s)
         rate.sleep()
         sisse = int(raw_input("Sisse? "))
-        pub.publish(50)
         if sisse == 1:
+            pub.publish(50)
             dist_list.append((goal_dist, s))
+        elif sisse == 0:
+            pub.publish(50)
         elif sisse == -1:
+            pub.publish(50)
             break
         
         rate.sleep()
