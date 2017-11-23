@@ -3,7 +3,11 @@ import rospy
 from std_msgs.msg import Int32MultiArray, Int32
 import math
 
-distance_corrector = [46.217, 50.82, 57.0, 63.51, 68.68, 73.76, 79.03, 83.42, 88.82, 93.59, 96.8, 101.64, 103.85, 107.71, 111.85, 116.27, 121.02, 126.12, 128.28, 130.5, 132.79, 136.36, 137.6, 142.73, 142.73, 144.07, 148.22, 146.81, 149.66, 152.6, 154.12, 162.12, 162.12, 160.46, 165.54, 163.8, 167.3]
+def get_motor_speeds(ax, ay, omega):
+    f1 = ax*0.58 - ay*0.33 + omega*0.33
+    f2 = -ax*0.58 - ay*0.33 + omega*0.33
+    f3 = ay*0.67 + omega*0.33
+    return int(round(f1*128)), int(round(f2*128)), int(round(f3*128))
 
 with open("calibration_data_height.txt", 'r') as fin:
     height_t = [ (int(line[0]), int(line[1])) for line in [ line.split() for line in fin.read().split('\n') if line ] ]
@@ -28,7 +32,7 @@ def hinda_nurka(x):
     x -= 320
     ra = 80.0*math.pi/180
     h = 320/math.sin(ra/2)*math.cos(ra/2)
-    return math.atan(x/h)
+    return math.atan(x/h)+2*math.pi/180
 
 def dist_from_hdata(x):
     for i in range(len(height_t)):
@@ -85,13 +89,21 @@ def __main__():
     rospy.Subscriber("BallPos", Int32MultiArray, callback_ball)
     rospy.Subscriber("GoalPos", Int32MultiArray, callback_goal)
     pub = rospy.Publisher("ToThrower", Int32, queue_size=10)
+    pubmot = rospy.Publisher("ToMotors", Int32, queue_size=10)
     
     rate = rospy.Rate(10) # 10hz
+    
+    state = 0
     while not rospy.is_shutdown():
         
-        if goal_dist_2:
-            pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
-            print "goal at angle", goal_angle
+        if state == 0:
+            # Otsime palli
+            f1, f2, f3 = get_motor_speeds(0, 0, 0.05)
+            pubmot.pub(Int32MultiArray(data=[f1, f2, f3]))
+        
+        #~ if goal_dist_2:
+            #~ pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
+            #~ print "goal at angle", goal_angle
         
         #~ print "got a goal at", goal_dist, goal_dist_2, goal_dist_3
         #~ for ball in balls_angle:
