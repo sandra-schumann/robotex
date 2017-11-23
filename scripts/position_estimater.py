@@ -212,7 +212,7 @@ def __main__():
                 pubmot.publish(Int32MultiArray(data=[ms1, ms2, ms3]))
                 
             elif state == 4:
-                if goal_counter > 700:
+                if goal_counter > 50:
                     pub.publish(50)
                     state = 0
                 else:
