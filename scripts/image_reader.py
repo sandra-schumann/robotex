@@ -102,7 +102,7 @@ def detect_goal(frame):
         x, y, w, h = goal_rect[0], goal_rect[1], goal_rect[2], goal_rect[3]
         cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
     else:
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)[:640,:400]
         lower_goal = np.array([18, 255, 70])
         upper_goal = np.array([20, 255, 89])
         goal_mask = cv2.inRange(hsv, lower_goal, upper_goal)
