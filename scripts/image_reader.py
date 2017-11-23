@@ -75,6 +75,8 @@ def detect_goal(frame):
             m11w = int(round((marker[0][0]+marker[3][0])/2-m11x))
             m11h = int(round((marker[0][1]+marker[1][1])/2-m11y))
             m11d = int(round(abs(marker[2][1]-marker[3][1])))
+        else:
+            print "seeing marker", marker.id
     
     goal_rect = [-1,-1,-1,-1]
     
