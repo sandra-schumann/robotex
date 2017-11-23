@@ -182,10 +182,13 @@ def __main__():
                     state = 3
             elif state == 3:
                 print "varav keskele"
-                for i in range(len(balls_angle)):
-                    if balls_dist[i] < 540:
-                        tball_dist = balls_dist[i]
-                        tball_ang = balls_angle[i]
+                try:
+                    for i in range(len(balls_angle)):
+                        if balls_dist[i] < 540:
+                            tball_dist = balls_dist[i]
+                            tball_ang = balls_angle[i]
+                except:
+                    pass
                 vx = 0
                 vy = 0
                 omega = 0
