@@ -169,7 +169,7 @@ def __main__():
         pub.publish(50)
         pubmot.publish(Int32MultiArray(data=[0,0,0]))
     
-    pub.publish(0)
+    pub.publish(50)
     pubmot.publish(Int32MultiArray(data=[0,0,0]))
 
 if __name__ == '__main__':
