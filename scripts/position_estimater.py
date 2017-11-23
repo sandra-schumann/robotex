@@ -84,12 +84,19 @@ def __main__():
     
     rospy.Subscriber("BallPos", Int32MultiArray, callback_ball)
     rospy.Subscriber("GoalPos", Int32MultiArray, callback_goal)
+    pub = rospy.Publisher("ToThrower", Int32, queue_size=10)
     
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
+        
+        pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
+        print "goal at angle", goal_angle*180/math.pi
+        
         #~ print "got a goal at", goal_dist, goal_dist_2, goal_dist_3
-        for ball in balls_angle:
-            print "got a ball at angle", ball
+        #~ for ball in balls_angle:
+            #~ print "got a ball at angle", ball
+        
+        
         rate.sleep()
 
 if __name__ == '__main__':
