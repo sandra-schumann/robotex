@@ -109,6 +109,7 @@ def __main__():
     state = 0
     tball_dist = None
     tball_ang = None
+    goal_counter = 0
     try:
         while not rospy.is_shutdown():
             
@@ -204,11 +205,29 @@ def __main__():
                     vy = max(min(0.4, -goal_angle/100),0.05)
                 else:
                     state = 4
+                    goal_counter = 0
                 ms1, ms2, ms3 = get_motor_speeds(vx, vy, omega)
                 pubmot.publish(Int32MultiArray(data=[ms1, ms2, ms3]))
+                
             elif state == 4:
-                print "stopping for now"
-                break
+                if goal_counter > 400:
+                    state = 0
+                else:
+                    print "viska!"
+                    if goal_angle > 1:
+                        omega = -max(min(0.4, goal_angle*180/math.pi/100),0.05)
+                    elif goal_angle < -1:
+                        omega = max(min(0.4, -goal_angle*180/math.pi/100),0.05)
+                    else:
+                        omega = 0
+                    if omega == 0:
+                        vx = 0.4
+                    else:
+                        vx = 0.2
+                    f1, f2, f3 = get_motor_speeds(vx, 0, omega)
+                    pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
+                    pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
+                    goal_counter += 1
                 
                 #~ state 
                 
