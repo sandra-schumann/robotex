@@ -143,7 +143,7 @@ def __main__():
                     pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
             
             elif state == 2:
-                pub.publish(0)
+                pub.publish(50)
                 pubmot.publish(Int32MultiArray(data=[0,0,0]))
                 print "Stopping for now"
                 
@@ -162,10 +162,10 @@ def __main__():
             
             rate.sleep()
     except KeyboardInterrupt:
-        pub.publish(0)
+        pub.publish(50)
         pubmot.publish(Int32MultiArray(data=[0,0,0]))
     except Exception:
-        pub.publish(0)
+        pub.publish(50)
         pubmot.publish(Int32MultiArray(data=[0,0,0]))
     
     pub.publish(0)
@@ -175,12 +175,12 @@ if __name__ == '__main__':
     try:
         __main__()
     except rospy.ROSInterruptException:
-        pub.publish(0)
+        pub.publish(50)
         pubmot.publish(Int32MultiArray(data=[0,0,0]))
         pass
     except KeyboardInterrupt:
-        pub.publish(0)
+        pub.publish(50)
         pubmot.publish(Int32MultiArray(data=[0,0,0]))
     except Exception:
-        pub.publish(0)
+        pub.publish(50)
         pubmot.publish(Int32MultiArray(data=[0,0,0]))
