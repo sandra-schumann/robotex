@@ -66,6 +66,7 @@ def __main__():
         else:
             s = int(raw_input("Enter desired speed: "))
             pub.publish(s)
+            rate.sleep()
             sisse = int(raw_input("Sisse? "))
             pub.publish(50)
             if sisse == 1:
