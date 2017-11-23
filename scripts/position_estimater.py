@@ -86,11 +86,13 @@ def callback_ball(data):
     balls = [ (data.data[3*i], data.data[3*i+1], data.data[3*i+2]) for i in range(len(data.data)/3) ]
     balls_angle = []
     for ball in balls:
-        balls_angle.append(hinda_nurka(ball[0]))
         d = dist_from_hdata(ball[1])
+        if d == 541:
+            continue
         if d == 40:
             d = hinda_kaugust(ball[1]/480.)
         balls_dist.append(d)
+        balls_angle.append(hinda_nurka(ball[0]))
 
 pub = None
 pubmot = None
