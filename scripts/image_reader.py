@@ -117,7 +117,7 @@ def __main__():
     ballpub = rospy.Publisher("BallPos", Int32MultiArray, queue_size=10)
     goalpub = rospy.Publisher("GoalPos", Int32MultiArray, queue_size=10)
     linepub = rospy.Publisher("LinePos", Float32MultiArray, queue_size=10)
-    rate = rospy.Rate(10) # 10hz
+    rate = rospy.Rate(100) # 10hz
     
     while not rospy.is_shutdown():
         _, frame = cap.read()

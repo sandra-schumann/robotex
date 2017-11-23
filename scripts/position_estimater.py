@@ -98,7 +98,7 @@ def __main__():
     pub = rospy.Publisher("ToThrower", Int32, queue_size=10)
     pubmot = rospy.Publisher("ToMotors", Int32MultiArray, queue_size=10)
     
-    rate = rospy.Rate(10) # 10hz
+    rate = rospy.Rate(100) # 10hz
     
     state = 0
     tball_dist = None
