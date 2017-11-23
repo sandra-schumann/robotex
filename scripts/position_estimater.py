@@ -99,7 +99,7 @@ def __main__():
         if state == 0:
             # Otsime palli
             f1, f2, f3 = get_motor_speeds(0, 0, 0.05)
-            pubmot.pub(Int32MultiArray(data=[f1, f2, f3]))
+            pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
         
         #~ if goal_dist_2:
             #~ pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
@@ -111,6 +111,9 @@ def __main__():
         
         
         rate.sleep()
+    
+    pub.publish(0)
+    pubmot.publish(Int32MultiArray(data=[0,0,0]))
 
 if __name__ == '__main__':
     try:
