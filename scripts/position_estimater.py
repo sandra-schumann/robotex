@@ -78,6 +78,8 @@ def callback_goal(data):
 
 def callback_ball(data):
     global balls_angle, balls_dist
+    balls_angle = []
+    balls_dist = []
     balls = [ (data.data[3*i], data.data[3*i+1], data.data[3*i+2]) for i in range(len(data.data)/3) ]
     balls_angle = []
     for ball in balls:
@@ -99,19 +101,47 @@ def __main__():
     rate = rospy.Rate(10) # 10hz
     
     state = 0
+    tball_dist = None
+    tball_ang = None
     try:
         while not rospy.is_shutdown():
             
             if state == 0:
                 if balls_dist != []:
                     print "found a ball"
+                    tball_dist = balls_dist[[0]
+                    tball_ang = balls_ang[0]
+                    state = 1
                 else:
-                    print balls_dist
+                    f1, f2, f3 = get_motor_speeds(0, 0, 0.1)
+                    pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
+                
+            elif state == 1:
+                if tball_dist < 20:
+                    print "we're close to the ball"
+                    state = 2
+                else:
+                    if tball_ang > 1:
+                        omega = max(min(0.2, tball_ang*180/math.pi/5),0.05)
+                    elif tball_ang < -1:
+                        omega = -max(min(0.2, -tball_ang*180/math.pi/5),0.05)
+                    else:
+                        omega = 0
+                    if omega == 0:
+                        vx = max(min(0.5,(tball_dist-20)/5),0.05)
+                    else:
+                        vx = 0
+                    f1, f2, f3 = get_motor_speeds(vx, 0, omega)
+                    pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
+            
+            elif state == 2:
+                pub.publish(0)
+                pubmot.publish(Int32MultiArray(data=[0,0,0]))
+                print "Stopping for now"
+                
                 #~ state 
                 
                 # Otsime palli
-                f1, f2, f3 = get_motor_speeds(0, 0, 0.1)
-                pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
             
             #~ if goal_dist_2:
                 #~ pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
