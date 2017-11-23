@@ -90,7 +90,7 @@ pub = None
 pubmot = None
 
 def __main__():
-    global pub, pubmot
+    global pub, pubmot, balls_dist, balls_angle
     rospy.init_node('position_estimater', anonymous=True)
     
     rospy.Subscriber("BallPos", Int32MultiArray, callback_ball)
@@ -109,7 +109,7 @@ def __main__():
             if state == 0:
                 if balls_dist != []:
                     print "found a ball"
-                    tball_dist = balls_dist[[0]
+                    tball_dist = balls_dist[0]
                     tball_ang = balls_angle[0]
                     state = 1
                 else:
