@@ -139,7 +139,7 @@ def __main__():
                     if omega == 0:
                         vx = max(min(0.2,(tball_dist-20)/20),0.05)
                     else:
-                        vx = 0
+                        vx = max(min(0.2,(tball_dist-20)/20),0.05)/3
                     f1, f2, f3 = get_motor_speeds(vx, 0, omega)
                     pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
             
