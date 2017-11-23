@@ -160,7 +160,11 @@ if __name__ == '__main__':
     try:
         __main__()
     except rospy.ROSInterruptException:
-        pass
+        if cap:
+            cap.close()
     except KeyboardInterrupt:
+        if cap:
+            cap.close()
+    except Exception:
         if cap:
             cap.close()
