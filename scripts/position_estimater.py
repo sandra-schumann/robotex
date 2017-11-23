@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import Int32MultiArray
+from std_msgs.msg import Int32MultiArray, Int32
 import math
 
 distance_corrector = [46.217, 50.82, 57.0, 63.51, 68.68, 73.76, 79.03, 83.42, 88.82, 93.59, 96.8, 101.64, 103.85, 107.71, 111.85, 116.27, 121.02, 126.12, 128.28, 130.5, 132.79, 136.36, 137.6, 142.73, 142.73, 144.07, 148.22, 146.81, 149.66, 152.6, 154.12, 162.12, 162.12, 160.46, 165.54, 163.8, 167.3]
