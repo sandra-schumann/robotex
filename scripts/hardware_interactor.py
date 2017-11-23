@@ -7,7 +7,7 @@ from constants import robot_ID, field_ID
 import time
 
 ser = None
-current_command = "START"
+current_command = "STOP"
 sdata = ""
 stime = None
 prevstime = None
