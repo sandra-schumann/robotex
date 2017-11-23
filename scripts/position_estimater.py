@@ -186,30 +186,23 @@ def __main__():
                     if balls_dist[i] < 540:
                         tball_dist = balls_dist[i]
                         tball_ang = balls_angle[i]
+                vx = 0
+                vy = 0
+                omega = 0
                 if tball_ang > 1*math.pi/180:
                     print "poorame vastupaeva"
                     omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
-                    vx = 0
-                    vy = 0
                 elif tball_ang < -1*math.pi/180:
                     print "poorame paripaeva"
                     omega = max(min(0.4, -tball_ang*180/math.pi/100),0.05)
-                    vx = 0
-                    vy = 0
-                elif tball_dist > 15:
+                if tball_dist > 15:
                     print "liigume lahemale"
                     vx = max(min(0.4,(tball_dist-20)/20),0.05)
-                    vy = 0
-                    omega = 0
-                elif goal_angle > 1:
-                    vx = 0
-                    omega = 0
-                    vy = -max(min(0.4, goal_angle/100),0.05)
+                if goal_angle > 1:
+                    vy = -max(min(0.1, goal_angle/100),0.05)
                 elif goal_angle < -1:
-                    vx = 0
-                    omega = 0
-                    vy = max(min(0.4, -goal_angle/100),0.05)
-                else:
+                    vy = max(min(0.1, -goal_angle/100),0.05)
+                elif tball_ang < 1 and tball_ang > -1:
                     state = 4
                     goal_counter = 0
                 ms1, ms2, ms3 = get_motor_speeds(vx, vy, omega)
