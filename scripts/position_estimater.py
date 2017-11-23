@@ -150,6 +150,8 @@ def __main__():
                 print "turning around the ball"
                 if time.time() - goal_age > 1:
                     print "otsime varavat"
+                    tball_dist = balls_dist[0]
+                    tball_ang = balls_angle[0]
                     if tball_ang > 1*math.pi/180:
                         print "poorame vastupaeva"
                         omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
