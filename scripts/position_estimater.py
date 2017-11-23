@@ -214,12 +214,13 @@ def __main__():
                     state = 0
                 else:
                     print "viska!"
-                    if goal_angle > 1:
-                        omega = -max(min(0.4, goal_angle*180/math.pi/100),0.05)
-                    elif goal_angle < -1:
-                        omega = max(min(0.4, -goal_angle*180/math.pi/100),0.05)
-                    else:
-                        omega = 0
+                    #~ if goal_exists and goal_angle > 1:
+                        #~ omega = -max(min(0.4, goal_angle*180/math.pi/100),0.05)
+                    #~ elif goal_exists and goal_angle < -1:
+                        #~ omega = max(min(0.4, -goal_angle*180/math.pi/100),0.05)
+                    #~ else:
+                        #~ omega = 0
+                    omega = 0
                     if omega == 0:
                         vx = 0.1
                     else:
