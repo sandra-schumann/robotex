@@ -119,6 +119,9 @@ def __main__():
     except KeyboardInterrupt:
         pub.publish(0)
         pubmot.publish(Int32MultiArray(data=[0,0,0]))
+    except Exception:
+        pub.publish(0)
+        pubmot.publish(Int32MultiArray(data=[0,0,0]))
     
     pub.publish(0)
     pubmot.publish(Int32MultiArray(data=[0,0,0]))
@@ -131,5 +134,8 @@ if __name__ == '__main__':
         pubmot.publish(Int32MultiArray(data=[0,0,0]))
         pass
     except KeyboardInterrupt:
+        pub.publish(0)
+        pubmot.publish(Int32MultiArray(data=[0,0,0]))
+    except Exception:
         pub.publish(0)
         pubmot.publish(Int32MultiArray(data=[0,0,0]))
