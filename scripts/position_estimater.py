@@ -130,13 +130,9 @@ def __main__():
                     state = 2
                 else:
                     print "ball distance:", tball_dist
-                    for i in range(len(balls_angle)):
-                        try:
-                            if balls_dist[i] < 540:
-                                tball_dist = balls_dist[i]
-                                tball_ang = balls_angle[i]
-                        except:
-                            pass
+                    if balls_dist[0] < 540:
+                        tball_dist = balls_dist[0]
+                        tball_ang = balls_angle[0]
                     if tball_ang > 1*math.pi/180:
                         print "ball angle is", tball_ang, "greater than 1"
                         omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
@@ -156,10 +152,9 @@ def __main__():
                 print "turning around the ball"
                 if time.time() - goal_age > 1:
                     print "otsime varavat"
-                    for i in range(len(balls_angle)):
-                        if balls_dist[i] < 540:
-                            tball_dist = balls_dist[i]
-                            tball_ang = balls_angle[i]
+                    if balls_dist[0] < 540:
+                        tball_dist = balls_dist[0]
+                        tball_ang = balls_angle[0]
                     if tball_ang > 1*math.pi/180:
                         print "poorame vastupaeva"
                         omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
@@ -185,13 +180,9 @@ def __main__():
                     state = 3
             elif state == 3:
                 print "varav keskele"
-                try:
-                    for i in range(len(balls_angle)):
-                        if balls_dist[i] < 540:
-                            tball_dist = balls_dist[i]
-                            tball_ang = balls_angle[i]
-                except:
-                    pass
+                if balls_dist[0] < 540:
+                    tball_dist = balls_dist[0]
+                    tball_ang = balls_angle[0]
                 vx = 0
                 vy = 0
                 omega = 0
