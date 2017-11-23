@@ -94,23 +94,27 @@ def __main__():
     rate = rospy.Rate(10) # 10hz
     
     state = 0
-    while not rospy.is_shutdown():
-        
-        if state == 0:
-            # Otsime palli
-            f1, f2, f3 = get_motor_speeds(0, 0, 0.05)
-            pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
-        
-        #~ if goal_dist_2:
-            #~ pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
-            #~ print "goal at angle", goal_angle
-        
-        #~ print "got a goal at", goal_dist, goal_dist_2, goal_dist_3
-        #~ for ball in balls_angle:
-            #~ print "got a ball at angle", ball
-        
-        
-        rate.sleep()
+    try:
+        while not rospy.is_shutdown():
+            
+            if state == 0:
+                # Otsime palli
+                f1, f2, f3 = get_motor_speeds(0, 0, 0.05)
+                pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
+            
+            #~ if goal_dist_2:
+                #~ pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
+                #~ print "goal at angle", goal_angle
+            
+            #~ print "got a goal at", goal_dist, goal_dist_2, goal_dist_3
+            #~ for ball in balls_angle:
+                #~ print "got a ball at angle", ball
+            
+            
+            rate.sleep()
+    except KeyboardInterrupt:
+        pub.publish(0)
+        pubmot.publish(Int32MultiArray(data=[0,0,0]))
     
     pub.publish(0)
     pubmot.publish(Int32MultiArray(data=[0,0,0]))
