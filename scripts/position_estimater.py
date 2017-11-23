@@ -191,10 +191,10 @@ def __main__():
                 omega = 0
                 if tball_ang > 1*math.pi/180:
                     print "poorame vastupaeva"
-                    omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
+                    omega = -max(min(0.4, tball_ang*180/math.pi/30),0.05)
                 elif tball_ang < -1*math.pi/180:
                     print "poorame paripaeva"
-                    omega = max(min(0.4, -tball_ang*180/math.pi/100),0.05)
+                    omega = max(min(0.4, -tball_ang*180/math.pi/30),0.05)
                 if tball_dist > 15:
                     print "liigume lahemale"
                     vx = max(min(0.4,(tball_dist-20)/20),0.05)
@@ -209,7 +209,7 @@ def __main__():
                 pubmot.publish(Int32MultiArray(data=[ms1, ms2, ms3]))
                 
             elif state == 4:
-                if goal_counter > 100:
+                if goal_counter > 700:
                     pub.publish(50)
                     state = 0
                 else:
@@ -221,9 +221,9 @@ def __main__():
                     else:
                         omega = 0
                     if omega == 0:
-                        vx = 0.2
-                    else:
                         vx = 0.1
+                    else:
+                        vx = 0.05
                     f1, f2, f3 = get_motor_speeds(vx, 0, omega)
                     pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
                     pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))

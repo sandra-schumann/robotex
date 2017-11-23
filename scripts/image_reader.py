@@ -101,6 +101,25 @@ def detect_goal(frame):
         goal_rect[3] = m11h
         x, y, w, h = goal_rect[0], goal_rect[1], goal_rect[2], goal_rect[3]
         cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
+    else:
+        lower_goal = np.array([18, 255, 70])
+        upper_goal = np.array([20, 255, 89])
+        goal_mask = cv2.inRange(hsv, lower_goal, upper_goal)
+        goal_res = cv2.cvtColor(cv2.bitwise_and(frame, frame, mask=goal_mask), cv2.COLOR_BGR2GRAY)
+        
+        if cv2.countNonZero(goal_mask) != 0:
+            ret,thresh = cv2.threshold(goal_mask,127,255,0)
+            _,contours,_ = cv2.findContours(thresh, 1, 2)
+            contours.sort(key = lambda cnt : cv2.boundingRect(cnt)[2]*cv2.boundingRect(cnt)[3])
+            if len(contours) > 0:
+                cnt = contours[len(contours)-1]
+                goal_rect = cv2.boundingRect(cnt)
+                x,y,w,h = goal_rect
+                cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
+            else:
+                goal_rect = [-1,-1,-1,-1]
+        else:
+            goal_rect = [-1,-1,-1,-1]
     
     #~ cv2.imshow("",frame)
     #~ k = cv2.waitKey(5) & 0xFF
