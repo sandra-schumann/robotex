@@ -9,7 +9,7 @@ from cv_bridge import CvBridge, CvBridgeError
 import time
 import aruco
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 print cv2.__version__
 
