@@ -110,7 +110,7 @@ def __main__():
                 if balls_dist != []:
                     print "found a ball"
                     tball_dist = balls_dist[[0]
-                    tball_ang = balls_ang[0]
+                    tball_ang = balls_angle[0]
                     state = 1
                 else:
                     f1, f2, f3 = get_motor_speeds(0, 0, 0.1)
