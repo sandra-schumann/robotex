@@ -89,7 +89,7 @@ def __main__():
     rospy.Subscriber("BallPos", Int32MultiArray, callback_ball)
     rospy.Subscriber("GoalPos", Int32MultiArray, callback_goal)
     pub = rospy.Publisher("ToThrower", Int32, queue_size=10)
-    pubmot = rospy.Publisher("ToMotors", Int32, queue_size=10)
+    pubmot = rospy.Publisher("ToMotors", Int32MultiArray, queue_size=10)
     
     rate = rospy.Rate(10) # 10hz
     
