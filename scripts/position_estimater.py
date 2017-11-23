@@ -154,7 +154,7 @@ def __main__():
                 else:
                     print "leidsime varava"
                     state = 3
-                pubmot.publish([ms1+0.2*128,ms2+0.2*128,ms3+0.2*128])
+                pubmot.publish(data=[ms1+0.2*128,ms2+0.2*128,ms3+0.2*128])
             else:
                 state = 3
                 pub.publish(50)
