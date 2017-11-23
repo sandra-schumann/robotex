@@ -2,6 +2,7 @@
 import rospy
 from std_msgs.msg import Int32MultiArray, Int32
 import math
+import time
 
 def get_motor_speeds(ax, ay, omega):
     f1 = ax*0.58 - ay*0.33 + omega*0.33
@@ -61,6 +62,7 @@ def dist_from_wdata(x):
 def get_throw_speed(x):
     return int(round(-0.000130968827*x**2 + 0.189313338*x + 157.439183+0.5))
 
+goal_age = -999
 goal_dist = None
 goal_angle = None
 goal_dist_2 = None
@@ -69,7 +71,8 @@ balls_dist = []
 balls_angle = []
 
 def callback_goal(data):
-    global goal_dist, goal_angle, goal_dist_2, goal_dist_3
+    global goal_dist, goal_angle, goal_dist_2, goal_dist_3, goal_age
+    goal_age = time.time()
     goal_rect = data.data
     goal_dist = hinda_kaugust(goal_rect[1]/480.)
     goal_angle = hinda_nurka(goal_rect[0]+goal_rect[2]/2)*180/math.pi
@@ -93,7 +96,7 @@ pub = None
 pubmot = None
 
 def __main__():
-    global pub, pubmot, balls_dist, balls_angle
+    global pub, pubmot, balls_dist, balls_angle, goal_age, goal_dist_2, goal_dist_3, goal_angle
     rospy.init_node('position_estimater', anonymous=True)
     
     rospy.Subscriber("BallPos", Int32MultiArray, callback_ball)
@@ -144,6 +147,13 @@ def __main__():
                     pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
             
             elif state == 2:
+                print "turning around the ball"
+                if time.time() - goal_age > 1:
+                    print "otsime varavat"
+                    ms1, ms2, ms3 = get_motor_speeds(0,0.2,0) 
+                turn_on_motors((ms1+0.2*128,ms2+0.2*128,ms3+0.2*128))
+            else:
+                state = 3
                 pub.publish(50)
                 pubmot.publish(Int32MultiArray(data=[0,0,0]))
                 print "Stopping for now"
