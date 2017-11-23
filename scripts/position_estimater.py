@@ -86,13 +86,11 @@ def callback_ball(data):
     balls = [ (data.data[3*i], data.data[3*i+1], data.data[3*i+2]) for i in range(len(data.data)/3) ]
     balls_angle = []
     for ball in balls:
+        balls_angle.append(hinda_nurka(ball[0]))
         d = dist_from_hdata(ball[1])
-        if d == 541:
-            continue
         if d == 40:
             d = hinda_kaugust(ball[1]/480.)
         balls_dist.append(d)
-        balls_angle.append(hinda_nurka(ball[0]))
 
 pub = None
 pubmot = None
@@ -132,8 +130,13 @@ def __main__():
                     state = 2
                 else:
                     print "ball distance:", tball_dist
-                    tball_dist = balls_dist[0]
-                    tball_ang = balls_angle[0]
+                    for i in range(len(balls_angle)):
+                        if balls_dist[i] < 540:
+                            tball_dist = balls_dist[i]
+                            tball_ang = balls_angle[i]
+                        else:
+                            tball_dist = None
+                            tball_ang = None
                     if tball_ang > 1*math.pi/180:
                         print "ball angle is", tball_ang, "greater than 1"
                         omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
@@ -153,8 +156,13 @@ def __main__():
                 print "turning around the ball"
                 if time.time() - goal_age > 1:
                     print "otsime varavat"
-                    tball_dist = balls_dist[0]
-                    tball_ang = balls_angle[0]
+                    for i in range(len(balls_angle)):
+                        if balls_dist[i] < 540:
+                            tball_dist = balls_dist[i]
+                            tball_ang = balls_angle[i]
+                        else:
+                            tball_dist = None
+                            tball_ang = None
                     if tball_ang > 1*math.pi/180:
                         print "poorame vastupaeva"
                         omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
@@ -180,8 +188,13 @@ def __main__():
                     state = 3
             elif state == 3:
                 print "varav keskele"
-                tball_dist = balls_dist[0]
-                tball_ang = balls_angle[0]
+                    for i in range(len(balls_angle)):
+                        if balls_dist[i] < 540:
+                            tball_dist = balls_dist[i]
+                            tball_ang = balls_angle[i]
+                        else:
+                            tball_dist = None
+                            tball_ang = None
                 if tball_ang > 1*math.pi/180:
                     print "poorame vastupaeva"
                     omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
@@ -224,9 +237,9 @@ def __main__():
                     else:
                         omega = 0
                     if omega == 0:
-                        vx = 0.4
-                    else:
                         vx = 0.2
+                    else:
+                        vx = 0.1
                     f1, f2, f3 = get_motor_speeds(vx, 0, omega)
                     pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
                     pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
