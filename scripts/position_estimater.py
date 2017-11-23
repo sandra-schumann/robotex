@@ -54,6 +54,9 @@ def dist_from_wdata(x):
             return (x-prevw)*(d-prevd)/(w-prevw) + prevd
     return width_t[-1][0]+1
 
+def get_throw_speed(x):
+    return int(round(-0.000130968827*x**2 + 0.189313338*x + 157.439183))
+
 goal_dist = None
 goal_angle = None
 goal_dist_2 = None
@@ -81,7 +84,6 @@ def __main__():
     
     rospy.Subscriber("BallPos", Int32MultiArray, callback_ball)
     rospy.Subscriber("GoalPos", Int32MultiArray, callback_goal)
-    #~ rospy.Subscriber("LinePos", Int32MultiArray, callback_line)
     
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
