@@ -175,11 +175,40 @@ def __main__():
                     pubmot.publish(Int32MultiArray(data=[ms1, ms2, ms3]))
                 else:
                     state = 3
-            else:
-                state = 3
-                pub.publish(50)
-                pubmot.publish(Int32MultiArray(data=[0,0,0]))
-                print "Stopping for now"
+            elif state == 3:
+                print "varav keskele"
+                tball_dist = balls_dist[0]
+                tball_ang = balls_angle[0]
+                if tball_ang > 1*math.pi/180:
+                    print "poorame vastupaeva"
+                    omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
+                    vx = 0
+                    vy = 0
+                elif tball_ang < -1*math.pi/180:
+                    print "poorame paripaeva"
+                    omega = max(min(0.4, -tball_ang*180/math.pi/100),0.05)
+                    vx = 0
+                    vy = 0
+                elif tball_dist > 15:
+                    print "liigume lahemale"
+                    vx = max(min(0.4,(tball_dist-20)/20),0.05)
+                    vy = 0
+                    omega = 0
+                elif goal_angle > 1:
+                    vx = 0
+                    omega = 0
+                    vy = -max(min(0.4, goal_angle/100),0.05)
+                elif goal_angle < -1:
+                    vx = 0
+                    omega = 0
+                    vy = max(min(0.4, -goal_angle/100),0.05)
+                else:
+                    state = 4
+                ms1, ms2, ms3 = get_motor_speeds(vx, vy, omega)
+                pubmot.publish(Int32MultiArray(data=[ms1, ms2, ms3]))
+            elif state == 4:
+                print "stopping for now"
+                break
                 
                 #~ state 
                 
