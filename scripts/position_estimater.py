@@ -137,7 +137,7 @@ def __main__():
                     else:
                         omega = 0
                     if omega == 0:
-                        vx = max(min(0.2,(tball_dist-20)/100),0.05)
+                        vx = max(min(0.2,(tball_dist-20)/20),0.05)
                     else:
                         vx = 0
                     f1, f2, f3 = get_motor_speeds(vx, 0, omega)
