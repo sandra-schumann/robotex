@@ -140,18 +140,18 @@ def __main__():
         
         edges = cv2.Canny(gray,400,500)
         lines = cv2.HoughLines(edges,1,np.pi/180,200)
-        try:
-            linepub_data = []
-            for line in lines:
-                print line
-                linepub_data.append(line[0][0])
-                linepub_data.append(line[0][1])
-            if linepub_data:
-                linepub_data = Float32MultiArray(data=linepub_data)
+        #~ try:
+            #~ linepub_data = []
+            #~ for line in lines:
+                #~ print line
+                #~ linepub_data.append(line[0][0])
+                #~ linepub_data.append(line[0][1])
+            #~ if linepub_data:
+                #~ linepub_data = Float32MultiArray(data=linepub_data)
                 #~ rospy.loginfo(linepub_data)
-                linepub.publish(linepub_data)
-        except Exception, e:
-            print e
+                #~ linepub.publish(linepub_data)
+        #~ except Exception, e:
+            #~ print e
         
         rate.sleep()
 
