@@ -89,8 +89,9 @@ def __main__():
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         
-        pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
-        print "goal at angle", goal_angle*180/math.pi
+        if goal_dist_2:
+            pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
+            print "goal at angle", goal_angle*180/math.pi
         
         #~ print "got a goal at", goal_dist, goal_dist_2, goal_dist_3
         #~ for ball in balls_angle:
