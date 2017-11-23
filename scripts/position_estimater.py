@@ -55,7 +55,7 @@ def dist_from_wdata(x):
     return width_t[-1][0]+1
 
 def get_throw_speed(x):
-    return int(round(-0.000130968827*x**2 + 0.189313338*x + 157.439183))+1
+    return int(round(-0.000130968827*x**2 + 0.189313338*x + 157.439183+0.5))
 
 goal_dist = None
 goal_angle = None
