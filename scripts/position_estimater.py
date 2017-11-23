@@ -134,9 +134,6 @@ def __main__():
                         if balls_dist[i] < 540:
                             tball_dist = balls_dist[i]
                             tball_ang = balls_angle[i]
-                        else:
-                            tball_dist = None
-                            tball_ang = None
                     if tball_ang > 1*math.pi/180:
                         print "ball angle is", tball_ang, "greater than 1"
                         omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
@@ -160,9 +157,6 @@ def __main__():
                         if balls_dist[i] < 540:
                             tball_dist = balls_dist[i]
                             tball_ang = balls_angle[i]
-                        else:
-                            tball_dist = None
-                            tball_ang = None
                     if tball_ang > 1*math.pi/180:
                         print "poorame vastupaeva"
                         omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
