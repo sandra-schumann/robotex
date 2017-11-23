@@ -50,7 +50,7 @@ def hinda_nurka(x):
     return math.atan(x/h)
 
 def __main__():
-    global goal_angle, goal_dist
+    global goal_angle, goal_dist, dist_list
     rospy.init_node('thrower_calibrator', anonymous=True)
 
     rospy.Subscriber("GoalPos", Int32MultiArray, callback)
@@ -86,3 +86,9 @@ if __name__ == '__main__':
         __main__()
     except rospy.ROSInterruptException:
         pass
+    except Exception:
+        fout = open("throw_calibration_data.txt", 'w')
+        for x,y in sorted(dist_list):
+            fout.write(str(x) + ' ' + str(y) + '\n')
+        fout.close()
+    
