@@ -77,11 +77,12 @@ def callback_goal(data):
     goal_dist_3 = dist_from_wdata(goal_rect[2])
 
 def callback_ball(data):
-    global balls_angle
+    global balls_angle, balls_dist
     balls = [ (data.data[3*i], data.data[3*i+1], data.data[3*i+2]) for i in range(len(data.data)/3) ]
     balls_angle = []
     for ball in balls:
         balls_angle.append(hinda_nurka(ball[0]))
+        balls_dist.append((dist_from_hdata(ball[1]) + dist_from_wdata(ball[2]))/2)
 
 pub = None
 pubmot = None
