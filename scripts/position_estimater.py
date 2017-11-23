@@ -91,7 +91,7 @@ def __main__():
         
         if goal_dist_2:
             pub.publish(get_throw_speed((goal_dist_2+goal_dist_3)/2))
-            print "goal at angle", goal_angle*180/math.pi
+            print "goal at angle", goal_angle
         
         #~ print "got a goal at", goal_dist, goal_dist_2, goal_dist_3
         #~ for ball in balls_angle:
