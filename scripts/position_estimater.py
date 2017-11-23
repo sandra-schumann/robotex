@@ -105,6 +105,8 @@ def __main__():
             if state == 0:
                 if balls_dist != []:
                     print "found a ball"
+                else:
+                    print balls_dist
                 #~ state 
                 
                 # Otsime palli
