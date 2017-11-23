@@ -121,14 +121,15 @@ def __main__():
                     print "we're close to the ball"
                     state = 2
                 else:
+                    print "ball distance:", tball_dist
                     tball_dist = balls_dist[0]
                     tball_ang = balls_angle[0]
                     if tball_ang > 1*math.pi/180:
                         print "ball angle is", tball_ang, "greater than 1"
-                        omega = -max(min(0.2, tball_ang*180/math.pi/20),0.05)
+                        omega = -max(min(0.3, tball_ang*180/math.pi/20),0.05)
                     elif tball_ang < -1*math.pi/180:
                         print "ball angle is", tball_ang, "less than 1"
-                        omega = max(min(0.2, -tball_ang*180/math.pi/20),0.05)
+                        omega = max(min(0.3, -tball_ang*180/math.pi/20),0.05)
                     else:
                         omega = 0
                     if omega == 0:
