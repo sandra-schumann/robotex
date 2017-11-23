@@ -127,6 +127,8 @@ if __name__ == '__main__':
     try:
         __main__()
     except rospy.ROSInterruptException:
+        pub.publish(0)
+        pubmot.publish(Int32MultiArray(data=[0,0,0]))
         pass
     except KeyboardInterrupt:
         pub.publish(0)
