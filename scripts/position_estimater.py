@@ -86,7 +86,7 @@ def callback_ball(data):
         balls_angle.append(hinda_nurka(ball[0]))
         d = dist_from_hdata(ball[1])
         if d == 40:
-            d = hinda_kaugust(ball[1])
+            d = hinda_kaugust(ball[1]/480.)
         balls_dist.append(d)
 
 pub = None
