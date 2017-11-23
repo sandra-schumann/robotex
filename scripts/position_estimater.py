@@ -102,6 +102,10 @@ def __main__():
         while not rospy.is_shutdown():
             
             if state == 0:
+                if balls_dist != []:
+                    print "found a ball"
+                #~ state 
+                
                 # Otsime palli
                 f1, f2, f3 = get_motor_speeds(0, 0, 0.1)
                 pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
