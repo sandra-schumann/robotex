@@ -66,13 +66,16 @@ def __main__():
         #~ else:
         s = int(raw_input("Enter desired speed: "))
         pub.publish(s)
-        rate.sleep()
+        print "goal_dist is", goal_dist
         sisse = int(raw_input("Sisse? "))
         if sisse == 1:
             pub.publish(50)
             dist_list.append((goal_dist, s))
+            print "adding distance", goal_dist
+            goal_dist = -999
         elif sisse == 0:
             pub.publish(50)
+            print "distance was", goal_dist
         elif sisse == -1:
             pub.publish(50)
             break
