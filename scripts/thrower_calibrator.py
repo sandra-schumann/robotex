@@ -67,6 +67,7 @@ def __main__():
             s = int(raw_input("Enter desired speed: "))
             pub.publish(s)
             sisse = int(raw_input("Sisse? "))
+            pub.publish(50)
             if sisse == 1:
                 dist_list.append((goal_dist, s))
             elif sisse == -1:

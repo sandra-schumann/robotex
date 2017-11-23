@@ -63,13 +63,13 @@ def detect_goal(frame):
     m10x, m10y, m10w, m10h, m10d = -1, -1, -1, -1, -1
     m11x, m11y, m11w, m11h, m11d = -1, -1, -1, -1, -1
     for marker in markers:
-        if marker.id == 21:
+        if marker.id == 10:
             m10x = int(round((marker[1][0]+marker[2][0])/2))
             m10y = int(round((marker[2][1]+marker[3][1])/2))
             m10w = int(round((marker[0][0]+marker[3][0])/2-m10x))
             m10h = int(round((marker[0][1]+marker[1][1])/2-m10y))
             m10d = int(round(abs(marker[2][1]-marker[3][1])))
-        if marker.id == 22:
+        if marker.id == 11:
             m11x = int(round((marker[1][0]+marker[2][0])/2))
             m11y = int(round((marker[2][1]+marker[3][1])/2))
             m11w = int(round((marker[0][0]+marker[3][0])/2-m11x))
