@@ -123,10 +123,10 @@ def __main__():
                 else:
                     tball_dist = balls_dist[0]
                     tball_ang = balls_angle[0]
-                    if tball_ang > 1:
+                    if tball_ang > 1*math.pi/180:
                         print "ball angle is", tball_ang, "greater than 1"
                         omega = max(min(0.2, tball_ang*180/math.pi/5),0.05)
-                    elif tball_ang < -1:
+                    elif tball_ang < -1*math.pi/180:
                         print "ball angle is", tball_ang, "less than 1"
                         omega = -max(min(0.2, -tball_ang*180/math.pi/5),0.05)
                     else:
