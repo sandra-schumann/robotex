@@ -125,14 +125,14 @@ def __main__():
                     tball_ang = balls_angle[0]
                     if tball_ang > 1*math.pi/180:
                         print "ball angle is", tball_ang, "greater than 1"
-                        omega = max(min(0.2, tball_ang*180/math.pi/5),0.05)
+                        omega = -max(min(0.2, tball_ang*180/math.pi/5),0.05)
                     elif tball_ang < -1*math.pi/180:
                         print "ball angle is", tball_ang, "less than 1"
-                        omega = -max(min(0.2, -tball_ang*180/math.pi/5),0.05)
+                        omega = max(min(0.2, -tball_ang*180/math.pi/5),0.05)
                     else:
                         omega = 0
                     if omega == 0:
-                        vx = max(min(0.5,(tball_dist-20)/5),0.05)
+                        vx = max(min(0.2,(tball_dist-20)/5),0.05)
                     else:
                         vx = 0
                     f1, f2, f3 = get_motor_speeds(vx, 0, omega)
