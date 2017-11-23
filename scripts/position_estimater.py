@@ -150,7 +150,10 @@ def __main__():
                 print "turning around the ball"
                 if time.time() - goal_age > 1:
                     print "otsime varavat"
-                    ms1, ms2, ms3 = get_motor_speeds(0,0.2,0) 
+                    ms1, ms2, ms3 = get_motor_speeds(0,0.2,0)
+                else:
+                    print "leidsime varava"
+                    state = 3
                 turn_on_motors((ms1+0.2*128,ms2+0.2*128,ms3+0.2*128))
             else:
                 state = 3
