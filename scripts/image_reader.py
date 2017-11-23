@@ -184,6 +184,3 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         if cap:
             cap.close()
-    except Exception:
-        if cap:
-            cap.close()
