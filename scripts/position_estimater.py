@@ -83,7 +83,11 @@ def callback_ball(data):
     for ball in balls:
         balls_angle.append(hinda_nurka(ball[0]))
 
+pub = None
+pubmot = None
+
 def __main__():
+    global pub, pubmot
     rospy.init_node('position_estimater', anonymous=True)
     
     rospy.Subscriber("BallPos", Int32MultiArray, callback_ball)
@@ -124,3 +128,6 @@ if __name__ == '__main__':
         __main__()
     except rospy.ROSInterruptException:
         pass
+    except KeyboardInterrupt:
+        pub.publish(0)
+        pubmot.publish(Int32MultiArray(data=[0,0,0]))
