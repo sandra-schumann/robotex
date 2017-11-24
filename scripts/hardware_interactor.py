@@ -11,7 +11,7 @@ current_command = "STOP"
 sdata = ""
 stime = None
 prevstime = None
-total_dists = [0,0,0]
+gdata = ""
 
 def init_mainboard():
     global ser
@@ -84,7 +84,7 @@ def turn_on_thrower(speed):
     print "turning on thrower at", speed.data
 
 def read_ref_commands():
-    global sdata, ser, stime, prevstime
+    global sdata, ser, stime, prevstime, gdata
     while True:
         news = ser.read(100)
         prevstime = stime
@@ -93,13 +93,17 @@ def read_ref_commands():
             break
         sdata += news
     find_ref = sdata.find("ref:")
+    find_gs = sdata.find("gs:")
     if find_ref != -1:
         print "sdata is", sdata
         s = sdata[find_ref+4:find_ref+16]
-        sdata = sdata[find_ref+16:]
-        print "got ref", s
     else:
         s = ""
+    if find_gs != -1:
+        gdata = sdata[find_gs+3:find_gs+16]
+    if find_ref != -1 or find_gs != -1:
+        sdata = sdata[max(find_ref, find_gs)+4:]
+        print "got", s
     c = ""
     if len(s) > 0 and s[0] == 'a' and len(s) >= 12:
         if s[1] == field_ID and (s[2] == robot_ID or s[2] == 'X'):
@@ -121,7 +125,7 @@ def read_ref_commands():
     return c
 
 def __main__():
-    global current_command, sdata, total_dists
+    global current_command, sdata, gdata, stime, prevstime
     rospy.init_node('hardware_interactor', anonymous=True)
     rospy.Subscriber("ToMotors", Int32MultiArray, turn_on_motors)
     rospy.Subscriber("ToThrower", Int32, turn_on_thrower)
@@ -147,23 +151,15 @@ def __main__():
                 turn_on_thrower(0)
             pub.publish(c)
         
-        find_gs = sdata.find("gs:")
-        if find_gs != -1:
-            s = sdata[find_gs+3:find_gs+15]
-            sdata = sdata[find_gs+15:]
-            print "got gs", s
-            if prevstime != None:
-                gs = s.split(':')
-                for i in range(len(gs)):
-                    try:
-                        gs[i] = int(gs[i])
-                    except:
-                        gs = gs[:i]
-                print "gs is", gs
-                print "time that passed was", stime - prevstime
-                #~ for i in range(max(3,len(gs))):
-                    #~ total_dists[i] += (stime - prevstime)*gs[i]*100
-                print "total distance:", total_dists
+        if gdata:
+            gs = gdata.split(':')
+            gdists = []
+            for g in gs:
+                try:
+                    gdists.append(int(g)*(stime-prevstime))
+                except:
+                    break
+            pub2.publish(Int32MultiArray(data=gdists))
         
         rate.sleep()
 
