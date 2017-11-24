@@ -15,6 +15,7 @@ gdata = ""
 
 def init_mainboard():
     global ser
+    print "initiating mainboard"
     ser = serial.Serial("/dev/ttyACM0",9600,timeout = 0.01,write_timeout = 0.01)
     #ser.write('sd:0:0:0\n')
 
