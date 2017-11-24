@@ -40,28 +40,6 @@ def turn_on_motors(data):
                 ser.close()
                 init_mainboard()
         print "turning motors at", f1, f2, f3
-    #~ while True:
-        #~ news = ser.read(100)
-        #~ if news == "":
-            #~ break
-        #~ sdata += news
-    #~ sdata += ser.read(100)
-    #~ find_gs = sdata.find("gs:")
-    #~ if find_gs != -1:
-        #~ s = sdata[find_gs+3:find_gs+15]
-        #~ newstime = time.time()
-        #~ sdata = sdata[find_gs+15:]
-        #~ print "got gs", s
-        #~ if stime != None:
-            #~ gs = s.split(':')
-            #~ for i in range(len(gs)):
-                #~ try:
-                    #~ gs[i] = int(gs[i])
-                #~ except:
-                    #~ gs = gs[:i]
-            #~ print "gs is", gs
-            #~ print "time that passed was", newstime - stime
-            #~ print "distances gone through:", (newstime-stime)*
 
 def turn_on_thrower(speed):
     global current_command, ser
@@ -96,7 +74,6 @@ def read_ref_commands():
     find_ref = sdata.find("ref:")
     find_gs = sdata.find("gs:")
     if find_ref != -1:
-        print "sdata is", sdata
         s = sdata[find_ref+4:find_ref+16]
     else:
         s = ""
@@ -160,16 +137,19 @@ def __main__():
         rate.sleep()
 
 if __name__ == '__main__':
-    while 1:
-        try:
-            __main__()
-        except rospy.ROSInterruptException:
-            pass
-        except serial.SerialException, e:
-            print e
-            if ser:
-                ser.close()
-        except KeyboardInterrupt:
-            if ser:
-                ser.close()
-            break
+    try:
+        __main__()
+    except rospy.ROSInterruptException, e:
+        print e
+        if ser:
+            ser.close()
+        break
+    except serial.SerialException, e:
+        print e
+        if ser:
+            ser.close()
+    except KeyboardInterrupt, e:
+        print e
+        if ser:
+            ser.close()
+        break
