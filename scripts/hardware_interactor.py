@@ -165,6 +165,10 @@ if __name__ == '__main__':
         __main__()
     except rospy.ROSInterruptException:
         pass
+    except serial.SerialException:
+        if ser:
+            ser.close()
+        __main__()
     except KeyboardInterrupt:
         if ser:
             ser.close()
