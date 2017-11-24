@@ -169,7 +169,6 @@ if __name__ == '__main__':
         except serial.SerialException:
             if ser:
                 ser.close()
-            __main__()
         except KeyboardInterrupt:
             if ser:
                 ser.close()
