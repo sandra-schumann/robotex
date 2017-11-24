@@ -86,7 +86,8 @@ def read_ref_commands():
                 c = "STOP"
             elif s[3:7] == "PING":
                 c = "PING"
-            ser.write('rf:a%c%cACK------\n' % (field_ID, robot_ID))
+            if s[2] == robot_ID:
+                ser.write('rf:a%c%cACK------\n' % (field_ID, robot_ID))
     return c
 
 def __main__():
