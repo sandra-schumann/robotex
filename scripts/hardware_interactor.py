@@ -74,10 +74,12 @@ def read_ref_commands():
     find_ref = sdata.find("ref:")
     find_gs = sdata.find("gs:")
     if find_ref != -1:
+        print "sdata", sdata
         s = sdata[find_ref+4:find_ref+16]
     else:
         s = ""
     if find_gs != -1:
+        print "sdata", sdata
         gdata = sdata[find_gs+3:find_gs+16]
     if find_ref != -1 or find_gs != -1:
         sdata = sdata[max(find_ref, find_gs)+4:]
@@ -133,6 +135,7 @@ def __main__():
                     break
             rospy.loginfo(Int32MultiArray(data=gdists))
             pub2.publish(Int32MultiArray(data=gdists))
+            gdata = ""
         
         rate.sleep()
 
@@ -143,7 +146,6 @@ if __name__ == '__main__':
         print e
         if ser:
             ser.close()
-        break
     except serial.SerialException, e:
         print e
         if ser:
@@ -152,4 +154,3 @@ if __name__ == '__main__':
         print e
         if ser:
             ser.close()
-        break
