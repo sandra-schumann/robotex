@@ -15,17 +15,29 @@ total_dists = [0,0,0]
 
 def init_mainboard():
     global ser
-    ser = serial.Serial("/dev/ttyACM0",9600,timeout = 0.002)
-    ser.write('sd:0:0:0\n')
+    ser = serial.Serial("/dev/ttyACM0",9600,timeout = 0.01,write_timeout = 0.01)
+    #ser.write('sd:0:0:0\n')
 
 def turn_on_motors(data):
     global current_command, sdata, stime, ser
     if current_command == "STOP":
-        ser.write('sd:0:0:0\n')
+        while 1:
+            try:
+                ser.write('sd:0:0:0\n')
+                break
+            except serial.SerialTimeoutException:
+                ser.close()
+                init_mainboard()
         print "stopping motors"
     else:
         (f1, f2, f3) = tuple(data.data[0:3])
-        ser.write('sd:%i:%i:%i\n' % (round(f1), round(f3), round(f2)))
+        while 1:
+            try:
+                ser.write('sd:%i:%i:%i\n' % (round(f1), round(f3), round(f2)))
+                break
+            except serial.SerialTimeoutException:
+                ser.close()
+                init_mainboard()
         print "turning motors at", f1, f2, f3
     #~ while True:
         #~ news = ser.read(100)
@@ -51,12 +63,24 @@ def turn_on_motors(data):
             #~ print "distances gone through:", (newstime-stime)*
 
 def turn_on_thrower(speed):
-    global current_command
+    global current_command, ser
     if current_command == "STOP":
-        ser.write('d:50\n')
+        while 1:
+            try:
+                ser.write('d:50\n')
+                break
+            except serial.SerialTimeoutException:
+                ser.close()
+                init_mainboard()
         print "stopping thrower"
         return
-    ser.write('d:%i\n' % (speed.data))
+    while 1:
+        try:
+            ser.write('d:%i\n' % (speed.data))
+            break
+        except serial.SerialTimeoutException:
+            ser.close()
+            init_mainboard()
     print "turning on thrower at", speed.data
 
 def read_ref_commands():
@@ -87,7 +111,13 @@ def read_ref_commands():
             elif s[3:7] == "PING":
                 c = "PING"
             if s[2] == robot_ID:
-                ser.write('rf:a%c%cACK------\n' % (field_ID, robot_ID))
+                while 1:
+                    try:
+                        ser.write('rf:a%c%cACK------\n' % (field_ID, robot_ID))
+                        break
+                    except serial.SerialTimeoutException:
+                        ser.close()
+                        init_mainboard()
     return c
 
 def __main__():
