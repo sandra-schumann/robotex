@@ -170,7 +170,8 @@ if __name__ == '__main__':
             __main__()
         except rospy.ROSInterruptException:
             pass
-        except serial.SerialException:
+        except serial.SerialException, e:
+            print e
             if ser:
                 ser.close()
         except KeyboardInterrupt:
