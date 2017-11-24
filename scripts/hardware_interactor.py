@@ -133,13 +133,7 @@ def __main__():
     pub = rospy.Publisher("FromRef", String, queue_size=10)
     pub2 = rospy.Publisher("FromMotors", Int32MultiArray, queue_size=10)
     init_mainboard()
-    while 1:
-        try:
-            ser.write('sd:0:0:0\n')
-            break
-        except serial.SerialTimeoutException:
-            ser.close()
-            init_mainboard()
+    ser.write('sd:0:0:0\n')
     rate = rospy.Rate(500)
     while not rospy.is_shutdown():
         c = read_ref_commands()
