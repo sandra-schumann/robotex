@@ -159,6 +159,7 @@ def __main__():
                     gdists.append(int(g)*(stime-prevstime))
                 except:
                     break
+            rospy.loginfo(Int32MultiArray(data=gdists))
             pub2.publish(Int32MultiArray(data=gdists))
         
         rate.sleep()
