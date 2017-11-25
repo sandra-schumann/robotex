@@ -2,12 +2,12 @@
 
 import rospy
 import serial
-from std_msgs.msg import Int32MultiArray, String, Int32
+from std_msgs.msg import Int32MultiArray, Float32MultiArray, String, Int32
 from constants import robot_ID, field_ID
 import time
 
 ser = None
-current_command = "STOP"
+current_command = "START"
 sdata = ""
 stime = None
 prevstime = None
@@ -110,7 +110,7 @@ def __main__():
     rospy.Subscriber("ToMotors", Int32MultiArray, turn_on_motors)
     rospy.Subscriber("ToThrower", Int32, turn_on_thrower)
     pub = rospy.Publisher("FromRef", String, queue_size=10)
-    pub2 = rospy.Publisher("FromMotors", Int32MultiArray, queue_size=10)
+    pub2 = rospy.Publisher("FromMotors", Float32MultiArray, queue_size=10)
     init_mainboard()
     ser.write('sd:0:0:0\n')
     rate = rospy.Rate(500)
@@ -133,8 +133,8 @@ def __main__():
                     gdists.append(int(g)*(stime-prevstime))
                 except:
                     break
-            rospy.loginfo(Int32MultiArray(data=gdists))
-            pub2.publish(Int32MultiArray(data=gdists))
+            rospy.loginfo(Float32MultiArray(data=gdists))
+            pub2.publish(Float32MultiArray(data=gdists))
             gdata = ""
         
         rate.sleep()

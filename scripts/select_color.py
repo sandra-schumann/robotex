@@ -115,6 +115,12 @@ while(1):
         high_str = str(color_range_high[0]) + ' ' + str(color_range_high[1]) + ' ' + str(color_range_high[2])
         fout.write(low_str + '\n' + high_str + '\n')
         fout.close()
+    elif k == ord('f'):
+        fout = open("field_color.txt", 'w')
+        low_str = str(color_range_low[0]) + ' ' + str(color_range_low[1]) + ' ' + str(color_range_low[2])
+        high_str = str(color_range_high[0]) + ' ' + str(color_range_high[1]) + ' ' + str(color_range_high[2])
+        fout.write(low_str + '\n' + high_str + '\n')
+        fout.close()
     elif k == ord('l'):
         fin = open("selected_color_range.txt", 'r')
         t = fin.read().splitlines()

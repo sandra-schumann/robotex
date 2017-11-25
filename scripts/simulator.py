@@ -5,7 +5,7 @@ import math
 import numpy as np
 import cv2
 
-balls_pos = [(0,0),(-75,-100),(-75,100),(75,-100),(75,100)]
+balls_pos = []
 robot_pos = [310/2, 460/2, 0]
 
 def callback_ball(data):
@@ -38,14 +38,19 @@ def callback_robotmove(data):
     robot_pos[1] += move_y*2
     robot_pos[2] = angle_to_goal()
 
+def callback_robotglobal(data):
+    global robot_pos
+    robot_pos = data.data
+
 def __main__():
-    global balls_pos
+    global balls_pos, robot_pos
     
     rospy.init_node('simulator', anonymous=True)
     
     rospy.Subscriber("BallGlobal", Int32MultiArray, callback_ball)
-    pub = rospy.Publisher("RobotGlobal", Float32MultiArray, queue_size=10)
-    rospy.Subscriber("RobotMove", Float32MultiArray, callback_robotmove)
+    #~ pub = rospy.Publisher("RobotGlobal", Float32MultiArray, queue_size=10)
+    #~ rospy.Subscriber("RobotMove", Float32MultiArray, callback_robotmove)
+    rospy.Subscriber("RobotGlobal", Float32MultiArray, callback_robotglobal)
     
     img = np.zeros((610,400,3), np.uint8)
     
@@ -60,7 +65,7 @@ def __main__():
     rate = rospy.Rate(50)
     
     while not rospy.is_shutdown():
-        pub.publish(Float32MultiArray(data=robot_pos))
+        #~ pub.publish(Float32MultiArray(data=robot_pos))
         
         rob_pos = tuple([ int(round(x)) for x in robot_pos ])
         
@@ -74,6 +79,7 @@ def __main__():
             i += 1
         
         robot_mask = cv2.bitwise_not(np.zeros((610,400,3), np.uint8))
+        print "drawing robot at", rob_pos[0]+200, rob_pos[1]+305
         cv2.circle(robot_mask,(rob_pos[0]+200,rob_pos[1]+305),17,(0,0,0),-1)
         cv2.line(robot_mask,(rob_pos[0]+200,rob_pos[1]+305),
         (int(round(rob_pos[0]+200+17*math.sin(rob_pos[2]*math.pi/1800.))),int(round(rob_pos[1]+305-17*math.cos(rob_pos[2]*math.pi/1800.)))),(255,255,255),3)

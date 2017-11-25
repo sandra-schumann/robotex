@@ -1,14 +1,8 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import Int32MultiArray, Int32
+from std_msgs.msg import Int32MultiArray, Float32MultiArray, Int32
 import math
 import time
-
-def get_motor_speeds(ax, ay, omega):
-    f1 = ax*0.58 - ay*0.33 + omega*0.33
-    f2 = -ax*0.58 - ay*0.33 + omega*0.33
-    f3 = ay*0.67 + omega*0.33
-    return int(round(f1*128)), int(round(f2*128)), int(round(f3*128))
 
 with open("calibration_data_height.txt", 'r') as fin:
     height_t = [ (int(line[0]), int(line[1])) for line in [ line.split() for line in fin.read().split('\n') if line ] ]
@@ -70,6 +64,8 @@ goal_dist_3 = None
 balls_dist = []
 balls_angle = []
 
+robot_pos = [460/2, 310/2, 0]
+
 def callback_goal(data):
     global goal_dist, goal_angle, goal_dist_2, goal_dist_3, goal_age
     goal_age = time.time()
@@ -92,19 +88,47 @@ def callback_ball(data):
             d = hinda_kaugust(ball[1]/480.)
         balls_dist.append(d)
 
+def get_motor_speeds(ax, ay, omega):
+    f1 = ax*0.58 - ay*0.33 + omega*0.33
+    f2 = -ax*0.58 - ay*0.33 + omega*0.33
+    f3 = ay*0.67 + omega*0.33
+    return int(round(f1*128)), int(round(f2*128)), int(round(f3*128))
+
 pub = None
 pubmot = None
+pubpos = None
+
+def callback_frommotors(data):
+    global robot_pos, pubpos
+    s1, s2, s3 = 0, 0, 0
+    for i in range(len(data.data)):
+        if i == 0:
+            s1 = data.data[0]
+        if i == 1:
+            s3 = data.data[1]
+        if i == 2:
+            s2 = data.data[2]
+    sx = s1*0.862069 - s2*0.862069
+    sy = - s1*0.5 - s2*0.5 + s3
+    so = s1 + s2 + s3
+    robot_pos[0] -= sx*0.13523698481710497
+    robot_pos[1] -= sy*0.13523698481710497
+    robot_pos[2] += so*10000.0*0.0006438629395431943
+    
+    pubpos.publish(Float32MultiArray(data=[-robot_pos[1], robot_pos[0], robot_pos[2]]))
 
 def __main__():
-    global pub, pubmot, balls_dist, balls_angle, goal_age, goal_dist_2, goal_dist_3, goal_angle
+    global pub, pubmot, pubpos, balls_dist, balls_angle, goal_age, goal_dist_2, goal_dist_3, goal_angle, robot_pos
     rospy.init_node('position_estimater', anonymous=True)
     
     rospy.Subscriber("BallPos", Int32MultiArray, callback_ball)
     rospy.Subscriber("GoalPos", Int32MultiArray, callback_goal)
+    rospy.Subscriber("FromMotors", Float32MultiArray, callback_frommotors)
     pub = rospy.Publisher("ToThrower", Int32, queue_size=10)
     pubmot = rospy.Publisher("ToMotors", Int32MultiArray, queue_size=10)
+    pubpos = rospy.Publisher("RobotGlobal", Float32MultiArray, queue_size=10)
     
-    rate = rospy.Rate(100) # 10hz
+    rate = rospy.Rate(10) # 10hz
     
     state = 0
     tball_dist = None
@@ -112,14 +136,19 @@ def __main__():
     goal_counter = 0
     try:
         while not rospy.is_shutdown():
+            if state == 5:
+                pubmot.publish(Int32MultiArray(data=[0,0,0]))
+                print "estimated robot position", robot_pos
             
             if state == 0:
+                print "in state 0"
                 if balls_dist != []:
                     print "found a ball"
                     tball_dist = balls_dist[0]
                     tball_ang = balls_angle[0]
                     state = 1
                 else:
+                    print "turning motors on"
                     f1, f2, f3 = get_motor_speeds(0, 0, 0.1)
                     pubmot.publish(Int32MultiArray(data=[f1, f2, f3]))
                 
@@ -155,25 +184,19 @@ def __main__():
                     if len(balls_dist) > 0 and balls_dist[0] < 540:
                         tball_dist = balls_dist[0]
                         tball_ang = balls_angle[0]
+                    print "ball dist", tball_dist
+                    omega = 0
+                    vx = 0
                     if tball_ang > 1*math.pi/180:
                         print "poorame vastupaeva"
                         omega = -max(min(0.4, tball_ang*180/math.pi/100),0.05)
-                        vx = 0
-                        vy = 0
                     elif tball_ang < -1*math.pi/180:
                         print "poorame paripaeva"
                         omega = max(min(0.4, -tball_ang*180/math.pi/100),0.05)
-                        vx = 0
-                        vy = 0
-                    elif tball_dist > 15:
+                    if tball_dist > 15:
                         print "liigume lahemale"
                         vx = max(min(0.4,(tball_dist-20)/20),0.05)
-                        vy = 0
-                        omega = 0
-                    else:
-                        vx = 0
-                        omega = 0
-                        vy = 0.2
+                    vy = 0.2
                     ms1, ms2, ms3 = get_motor_speeds(vx, vy, omega)
                     pubmot.publish(Int32MultiArray(data=[ms1, ms2, ms3]))
                 else:
@@ -183,6 +206,7 @@ def __main__():
                 if len(balls_dist) > 0 and balls_dist[0] < 540:
                     tball_dist = balls_dist[0]
                     tball_ang = balls_angle[0]
+                print "ball dist", tball_dist
                 vx = 0
                 vy = 0
                 omega = 0
@@ -206,7 +230,7 @@ def __main__():
                 pubmot.publish(Int32MultiArray(data=[ms1, ms2, ms3]))
                 
             elif state == 4:
-                if goal_counter > 20:
+                if goal_counter > 50:
                     pub.publish(50)
                     state = 0
                 else:
